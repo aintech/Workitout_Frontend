@@ -1,0 +1,29 @@
+<div class="container">
+  <h1>Workouts</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor = "let workout of workouts">
+        <td>{{ workout.id }}</td>
+        <td>{{ workout.name }}</td>
+        <td>
+          <a
+            [routerLink]="['/workout-edit', workout.id]"
+            class="btn btn-primary">
+            edit
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <a
+    [routerLink] = "['/workout-create']"
+    class="btn btn-primary">
+    Add Workout
+  </a>
+</div>

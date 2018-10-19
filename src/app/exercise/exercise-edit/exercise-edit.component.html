@@ -1,0 +1,63 @@
+<div class="container">
+  <h1>Edit Exercise</h1>
+  <div class="row">
+    <div class="col-md-6">
+      <form (ngSubmit)="onSubmit()" #exerciseForm="ngForm">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="exercise.name"
+            name="name"
+            required>
+          <label for="instruction">Instruction</label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="exercise.instruction"
+            name="instruction">
+        </div>
+        <h2>Rounds</h2>
+        <div *ngFor="let round of exercise.rounds" class="form-group">
+          <h3>Round {{ round.index + 1}}</h3>
+          <label for="repeat_{{ round.index }}">Repeats</label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="round.repeat"
+            name="repeat_{{ round.index }}">
+            <label for="timeout_{{ round.index }}">Timeout</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="round.timeout"
+              name="timeout_{{ round.index }}">
+        </div>
+        <button
+          type="button"
+          class="btn btn-success"
+          (click)="addRound()">
+          Add Round
+        </button>
+        <div style="height: 5px;"></div>
+        <hr>
+        <div class="form-group">
+          <button
+            type="submit"
+            class="btn btn-success"
+            [disabled]="!exerciseForm.valid"
+            style="margin-right: 15px;">
+            Save
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            (click)="onCancel()">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
