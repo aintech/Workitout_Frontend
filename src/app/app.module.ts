@@ -12,6 +12,8 @@ import { ExerciseService } from './exercise/exercise.service';
 import { WorkoutListComponent } from './workout/workout-list/workout-list.component';
 import { WorkoutEditComponent } from './workout/workout-edit/workout-edit.component';
 import { WorkoutService } from './workout/workout.service';
+import { HeaderComponent } from './header/header.component';
+import { FooterComponent } from './footer/footer.component';
 
 const appRoutes: Routes = [
   {
@@ -53,7 +55,9 @@ const appRoutes: Routes = [
     ExerciseCreateComponent,
     ExerciseEditComponent,
     WorkoutListComponent,
-    WorkoutEditComponent
+    WorkoutEditComponent,
+    HeaderComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
