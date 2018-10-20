@@ -7,5 +7,5 @@ export class Exercise {
   weight: number;
   instruction: string;
   timeout: number = 30;
-  rounds: Round[];
+  rounds: Round[] = [];
 }

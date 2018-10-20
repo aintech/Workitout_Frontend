@@ -10,10 +10,13 @@ export class WorkoutService {
 
   workoutPersisted = new Subject<Workout>();
 
+  roundsDeleted: Subject<void> = new Subject<void>();
+  exercisesDeleted: Subject<void> = new Subject<void>();
+
   constructor(private http: HttpClient) {}
 
   getWorkout (id: number): Observable<Workout> {
-    return this.http.get<Workout>('/back/workout/' + id);
+    return this.http.get<Workout>('/back/workouts/' + id);
   }
 
   persist (workout: Workout) {
@@ -28,7 +31,7 @@ export class WorkoutService {
                 const savedExer: Exercise = <Exercise>dataExer;
                 if (exercise.rounds != null) {
                   exercise.rounds.forEach(round => {
-                    this.saveRound(round, savedExer).subscribe(res => {});
+                    this.saveRound(round, savedExer);
                   });
                 }
               }
@@ -56,11 +59,51 @@ export class WorkoutService {
     }
   }
 
-  private saveRound (round: Round, exercise: Exercise): Observable<Round> {
+  private saveRound (round: Round, exercise: Exercise) {
     if (round.id == null) {
-      return this.http.post<Round>('/back/rounds/' + exercise.id, round);
+       this.http.post<Round>('/back/rounds/' + exercise.id, round).subscribe(res => {});
     } else {
-      return this.http.put<Round>('/back/rounds/' + round.id, round);
+      this.http.put<Round>('/back/rounds/' + round.id, round).subscribe(res => {});
     }
+  }
+
+  public deleteExercises (exercises: Exercise[]) {
+    let counter: number = exercises.length;
+    if (counter == 0) {
+      this.exercisesDeleted.next();
+    } else {
+      exercises.forEach(exercise => {
+        this.deleteExercise(exercise).subscribe(res => {
+          counter--;
+          if (counter == 0) {
+            this.exercisesDeleted.next();
+          }
+        });
+      });
+    }
+  }
+
+  public deleteExercise (exercise: Exercise): Observable<Object> {
+    return this.http.delete('/back/exercises/' + exercise.id);
+  }
+
+  public deleteRounds (rounds: Round[]) {
+    let counter: number = rounds.length;
+    if (counter == 0) {
+      this.roundsDeleted.next();
+    } else {
+      rounds.forEach(rnd => {
+        this.deleteRound(rnd).subscribe(res => {
+          counter--;
+          if (counter == 0) {
+            this.roundsDeleted.next();
+          }
+        });
+      });
+    }
+  }
+
+  public deleteRound (round: Round): Observable<Object> {
+    return this.http.delete('/back/rounds/' + round.id);
   }
 }

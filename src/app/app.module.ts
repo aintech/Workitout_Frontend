@@ -11,7 +11,6 @@ import { ExerciseEditComponent } from './exercise/exercise-edit/exercise-edit.co
 import { ExerciseService } from './exercise/exercise.service';
 import { WorkoutListComponent } from './workout/workout-list/workout-list.component';
 import { WorkoutEditComponent } from './workout/workout-edit/workout-edit.component';
-import { WorkoutCreateComponent } from './workout/workout-create/workout-create.component';
 import { WorkoutService } from './workout/workout.service';
 
 const appRoutes: Routes = [
@@ -19,11 +18,6 @@ const appRoutes: Routes = [
     path: 'workout-list',
     component: WorkoutListComponent,
     data: { title: 'Workout List' }
-  },
-  {
-    path: 'workout-create',
-    component: WorkoutCreateComponent,
-    data: { title: 'Workout Create' }
   },
   {
     path: 'workout-edit/:id',
@@ -59,8 +53,7 @@ const appRoutes: Routes = [
     ExerciseCreateComponent,
     ExerciseEditComponent,
     WorkoutListComponent,
-    WorkoutEditComponent,
-    WorkoutCreateComponent
+    WorkoutEditComponent
   ],
   imports: [
     BrowserModule,
