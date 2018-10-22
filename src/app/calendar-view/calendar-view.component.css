@@ -1,0 +1,11 @@
+th.tabrow {
+  height: 30px;
+  width: 150px;
+  border: solid thin;
+}
+
+td.tabrow {
+  height: 50px;
+  width: 150px;
+  border: solid thin;
+}

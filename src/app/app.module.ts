@@ -14,17 +14,23 @@ import { WorkoutEditComponent } from './workout/workout-edit/workout-edit.compon
 import { WorkoutService } from './workout/workout.service';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { CalendarViewComponent } from './calendar-view/calendar-view.component';
 
 const appRoutes: Routes = [
   {
+    path: 'calendar-view',
+    component: CalendarViewComponent,
+    data: { title: 'Calendar' }
+  },
+  {
     path: 'workout-list',
     component: WorkoutListComponent,
-    data: { title: 'Workout List' }
+    data: { title: 'Workouts' }
   },
   {
     path: 'workout-edit/:id',
     component: WorkoutEditComponent,
-    data: { title: 'Workout Edit' }
+    data: { title: 'Workout Editor' }
   },
   {
     path: 'exercise-list',
@@ -43,7 +49,7 @@ const appRoutes: Routes = [
   },
   {
     path: '',
-    redirectTo: '/workout-list',
+    redirectTo: '/calendar-view',
     pathMatch: 'full'
   }
 ];
@@ -57,7 +63,8 @@ const appRoutes: Routes = [
     WorkoutListComponent,
     WorkoutEditComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    CalendarViewComponent
   ],
   imports: [
     BrowserModule,
