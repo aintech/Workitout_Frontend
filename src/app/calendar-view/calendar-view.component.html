@@ -14,14 +14,10 @@
     </thead>
     <tbody>
       <tr style="height: 10px;"></tr>
-      <tr>
-        <td class="tabrow">1</td>
-        <td class="tabrow">1</td>
-        <td class="tabrow">1</td>
-        <td class="tabrow">1</td>
-        <td class="tabrow">1</td>
-        <td class="tabrow">1</td>
-        <td class="tabrow">1</td>
+      <tr *ngFor="let week of dates">
+        <td *ngFor="let day of week" class="tabrow" class="btn btn-outline-primary btn-lg btn-block" (click)="onCalendarClick()">
+          {{ day.dayVal }}
+        </td>
       </tr>
     </tbody>
   </table>
