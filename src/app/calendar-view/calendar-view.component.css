@@ -5,7 +5,7 @@ th.tabrow {
 }
 
 td.tabrow {
-  height: 50px;
+  height: 120px;
   width: 150px;
-  border: solid thin;
+  /* border: solid thin; */
 }

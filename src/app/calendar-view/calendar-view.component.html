@@ -1,6 +1,6 @@
 <div class="container" align="center">
   <h2>{{ monthYear }}</h2>
-  <table cellspacing="5" cellpadding="5" style="text-align: center; vertical-align: middle;">
+  <table style="text-align: center; vertical-align: middle;">
     <thead>
       <tr style="background-color: lightgray; height: 30px;">
         <th class="tabrow">monday</th>
@@ -15,8 +15,15 @@
     <tbody>
       <tr style="height: 10px;"></tr>
       <tr *ngFor="let week of dates">
-        <td *ngFor="let day of week" class="tabrow" class="btn btn-outline-primary btn-lg btn-block" (click)="onCalendarClick()">
-          {{ day.dayVal }}
+        <td *ngFor="let day of week" class="tabrow">
+          <div class="btn btn-outline-primary btn-lg btn-block"
+            style="height: 100%; font-size: 30px;"
+            [style.color]="day.color"
+            [style.border-color]="day.borderColor"
+            [style.background-color]="day.backColor"
+            (click)="onCalendarClick()">
+            {{ day.dayVal }}
+          </div>
         </td>
       </tr>
     </tbody>

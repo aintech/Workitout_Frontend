@@ -31,13 +31,13 @@ export class CalendarViewComponent implements OnInit {
     for (let i:number = 0; i < 6; i++) {
       this.dates[i] = [];
       for (let j: number = 0; j < 7; j++) {
-        this.dates[i].push(new CalendarDate(new Date(beginingDate.getFullYear(), beginingDate.getMonth(), beginingDate.getDate() + index)));
+        this.dates[i].push(new CalendarDate(new Date(beginingDate.getFullYear(), beginingDate.getMonth(), beginingDate.getDate() + index), currDate));
         index++;
       }
     }
   }
 
   onCalendarClick () {
-    console.log("click");
+    console.log("CLICK");
   }
 }
