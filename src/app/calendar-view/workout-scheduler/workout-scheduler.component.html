@@ -1,0 +1,5 @@
+<div class="dialog" *ngIf="visible">
+  <h1>Schedule Workout</h1>
+  <button *ngIf="closeable" type="button" class="dialog-close-btn" aria-label="Close" (click)="close()">Close</button>
+</div>
+<div *ngIf="visible" class="overlay" (click)="close()"></div>

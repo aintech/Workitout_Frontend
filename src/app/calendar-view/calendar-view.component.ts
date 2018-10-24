@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { CalendarDate } from './CalendarDate.model';
 
 @Component({
@@ -13,6 +13,8 @@ export class CalendarViewComponent implements OnInit {
   months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
   monthYear: string;
+
+  showDialog: boolean = false;
 
   constructor() { }
 
@@ -38,6 +40,6 @@ export class CalendarViewComponent implements OnInit {
   }
 
   onCalendarClick () {
-    console.log("CLICK");
+    this.showDialog = true;
   }
 }

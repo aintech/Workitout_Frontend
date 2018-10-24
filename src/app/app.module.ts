@@ -15,6 +15,7 @@ import { WorkoutService } from './workout/workout.service';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { CalendarViewComponent } from './calendar-view/calendar-view.component';
+import { WorkoutSchedulerComponent } from './calendar-view/workout-scheduler/workout-scheduler.component';
 
 const appRoutes: Routes = [
   {
@@ -64,7 +65,8 @@ const appRoutes: Routes = [
     WorkoutEditComponent,
     HeaderComponent,
     FooterComponent,
-    CalendarViewComponent
+    CalendarViewComponent,
+    WorkoutSchedulerComponent
   ],
   imports: [
     BrowserModule,
