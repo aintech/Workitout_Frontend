@@ -1,5 +1,28 @@
 <div class="dialog" *ngIf="visible">
-  <h1>Schedule Workout</h1>
-  <button *ngIf="closeable" type="button" class="dialog-close-btn" aria-label="Close" (click)="close()">Close</button>
+  <div class="container">
+    <div align="center">
+      <h4>Workout Scheduler</h4>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        {{ schedulerDate.dayFullVal }} - choose Workout to schedule:
+        <hr>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <button type="button" class="btn btn-outline-primary btn-lg btn-block" *ngFor="let workout of workouts" (click)="onWorkoutChosen(workout)">
+          {{ workout.name }}
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <hr>
+        <!-- <button type="button" class="btn btn-success" (click)="apply()">Apply</button> -->
+        <button type="button" class="btn btn-primary" style="float: right;" (click)="cancel()">Cancel</button>
+      </div>
+    </div>
+  </div>
 </div>
-<div *ngIf="visible" class="overlay" (click)="close()"></div>
+<div *ngIf="visible" class="overlay" (click)="cancel()"></div>

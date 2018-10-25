@@ -21,7 +21,7 @@
             [style.color]="day.color"
             [style.border-color]="day.borderColor"
             [style.background-color]="day.backColor"
-            (click)="onCalendarClick(template)">
+            (click)="workoutScheduler.open(day)">
             {{ day.dayVal }}
           </div>
         </td>
@@ -30,7 +30,8 @@
   </table>
 </div>
 
-<app-workout-scheduler [(visible)]="showDialog">
+<app-workout-scheduler #workoutScheduler>
+<!-- <app-workout-scheduler [(visible)]="schedulerVisible"> -->
   <!-- <h1>Schedule Workout</h1> -->
   <!-- <button type="button" (click)="showDialog = !showDialog" class="btn">Close</button> -->
 </app-workout-scheduler>

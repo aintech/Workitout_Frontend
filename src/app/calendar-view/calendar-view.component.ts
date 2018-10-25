@@ -14,9 +14,7 @@ export class CalendarViewComponent implements OnInit {
 
   monthYear: string;
 
-  showDialog: boolean = false;
-
-  constructor() { }
+  constructor () { }
 
   ngOnInit() {
     const currDate: Date = new Date();
@@ -37,9 +35,5 @@ export class CalendarViewComponent implements OnInit {
         index++;
       }
     }
-  }
-
-  onCalendarClick () {
-    this.showDialog = true;
   }
 }

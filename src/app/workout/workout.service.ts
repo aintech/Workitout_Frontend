@@ -19,6 +19,10 @@ export class WorkoutService {
     return this.http.get<Workout>('/back/workouts/' + id);
   }
 
+  getWorkouts (): Observable<Workout[]> {
+    return this.http.get<Workout[]>('/back/workouts');
+  }
+
   persist (workout: Workout) {
     this.saveWorkout(workout).subscribe(
       data => {

@@ -3,6 +3,7 @@ export class CalendarDate {
   date: Date;
 
   dayVal: string;
+  dayFullVal: string;
 
   color: string;
   borderColor: string;
@@ -12,14 +13,17 @@ export class CalendarDate {
   constructor(date: Date, currDate: Date) {
     this.date = date;
     this.dayVal = date.getDate().toString();
-    
-    const dateStr: string = "" + date.getFullYear() +
-                            "" + (date.getMonth() < 10? ("0" + date.getMonth()): ("" + date.getMonth())) +
-                            "" + (date.getDate() < 10? ("0" + date.getDate()): ("" + date.getDate()));
+    this.dayFullVal = (date.getDate() < 10? ("0" + date.getDate()): date.getDate().toString()) + "." + 
+                      (date.getMonth() < 10? ("0" + date.getMonth()): date.getMonth().toString()) + "." +
+                      date.getFullYear();
 
-    const currDateStr: string = "" + currDate.getFullYear() +
-                                "" + (currDate.getMonth() < 10? ("0" + currDate.getMonth()): ("" + currDate.getMonth())) +
-                                "" + (currDate.getDate() < 10? ("0" + currDate.getDate()): ("" + currDate.getDate()));
+    const dateStr: string = date.getFullYear().toString() +
+                            (date.getMonth() < 10? ("0" + date.getMonth()): date.getMonth().toString()) +
+                            (date.getDate() < 10? ("0" + date.getDate()): date.getDate().toString());
+
+    const currDateStr: string = currDate.getFullYear().toString() +
+                                (currDate.getMonth() < 10? ("0" + currDate.getMonth()): currDate.getMonth().toString()) +
+                                (currDate.getDate() < 10? ("0" + currDate.getDate()): currDate.getDate().toString());
 
     const dateDiff: number = parseInt(dateStr) - parseInt(currDateStr);
 
