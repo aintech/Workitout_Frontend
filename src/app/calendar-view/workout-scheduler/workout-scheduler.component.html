@@ -3,26 +3,59 @@
     <div align="center">
       <h4>Workout Scheduler</h4>
     </div>
-    <div class="row">
-      <div class="col-lg-12">
-        {{ schedulerDate.dayFullVal }} - choose Workout to schedule:
-        <hr>
+
+    <div *ngIf="schedulerDate.schedule == null">
+      <div class="row">
+        <div class="col-lg-12">
+          {{ schedulerDate.dayFullVal }} - choose Workout to schedule:
+          <hr>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <button type="button" class="btn btn-outline-primary btn-lg btn-block"
+            *ngFor="let workout of workouts" (click)="onWorkoutChosen(workout)">
+            {{ workout.name }}
+          </button>
+        </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-lg-12">
-        <button type="button" class="btn btn-outline-primary btn-lg btn-block" *ngFor="let workout of workouts" (click)="onWorkoutChosen(workout)">
-          {{ workout.name }}
-        </button>
+
+    <div *ngIf="schedulerDate.schedule != null">
+      <div class="row">
+        <div class="col-lg-12">
+          {{ schedulerDate.dayFullVal }} - {{ schedulerDate.schedule.workout.name }}
+          <hr>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <div *ngIf="schedulerDate.today" align="center" style="height: 70px; line-height: 70px;">
+            <button type="button" class="btn btn-outline-primary btn-lg btn-block" style="display: inline-block;"
+              (click)="performWorkout()">
+              -> Perform Workout
+            </button>
+          </div>
+          <div *ngIf="!schedulerDate.history" style="height: 70px; line-height: 70px;">
+            <button type="button" class="btn btn-outline-danger btn-lg btn-block" style="color: red; display: inline-block;"
+              (click)="cancelWorkout()">
+              X Cancel Workout
+            </button>
+          </div>
+          <div *ngIf="schedulerDate.history">
+            <h1>HISTORY VIEW</h1>
+          </div>
+        </div>
       </div>
     </div>
+
     <div class="row">
       <div class="col-lg-12">
         <hr>
         <!-- <button type="button" class="btn btn-success" (click)="apply()">Apply</button> -->
-        <button type="button" class="btn btn-primary" style="float: right;" (click)="cancel()">Cancel</button>
+        <button type="button" class="btn btn-primary" style="float: right;" (click)="close()">Close</button>
       </div>
     </div>
   </div>
 </div>
-<div *ngIf="visible" class="overlay" (click)="cancel()"></div>
+<div *ngIf="visible" class="overlay" (click)="close()"></div>

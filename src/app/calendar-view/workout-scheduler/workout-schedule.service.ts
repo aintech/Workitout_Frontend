@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, EventEmitter } from "@angular/core";
 import { Observable } from "rxjs";
 import { WorkoutSchedule } from "./workout-schedule.model";
 import { HttpClient } from "@angular/common/http";
@@ -13,9 +13,11 @@ export class WorkoutScheduleService {
     return this.http.get<WorkoutSchedule[]>('/back/workoutschedules');
   }
 
-  persist (workout: Workout, workoutSchedule: WorkoutSchedule) {
-    this.http.post('/back/workoutschedules/' + workout.id, workoutSchedule).subscribe(
-      res => {}, (err) => { console.log(err); }
-    )
+  persist (workout: Workout, workoutSchedule: WorkoutSchedule): Observable<WorkoutSchedule> {
+    return this.http.post<WorkoutSchedule>('/back/workoutschedules/' + workout.id, workoutSchedule);
+  }
+
+  delete (workoutSchedule: WorkoutSchedule): Observable<string> {
+    return this.http.delete<string>('/back/workoutschedules/' + workoutSchedule.id);
   }
 }

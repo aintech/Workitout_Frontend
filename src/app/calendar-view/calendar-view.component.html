@@ -1,33 +1,61 @@
 <div class="container" align="center">
-  <h2>{{ monthYear }}</h2>
-  <table style="text-align: center; vertical-align: middle;">
-    <thead>
-      <tr style="background-color: lightgray; height: 30px;">
-        <th class="tabrow">monday</th>
-        <th class="tabrow">tuesday</th>
-        <th class="tabrow">wednesday</th>
-        <th class="tabrow">thursday</th>
-        <th class="tabrow">friday</th>
-        <th class="tabrow">saturday</th>
-        <th class="tabrow">sunday</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr style="height: 10px;"></tr>
-      <tr *ngFor="let week of dates">
-        <td *ngFor="let day of week" class="tabrow">
-          <div class="btn btn-outline-primary btn-lg btn-block"
-            style="height: 100%; font-size: 30px;"
-            [style.color]="day.color"
-            [style.border-color]="day.borderColor"
-            [style.background-color]="day.backColor"
-            (click)="workoutScheduler.open(day)">
-            {{ day.dayVal }}
-          </div>
+  <div class="col-lg-12">
+    <button type="button" name="button" class="btn btn-info" style="float: right; margin-right: 15px;" (click)="addHistory()">
+      Add Historical Data
+    </button>
+    <table>
+      <tr>
+        <td>
+          <button type="button" class="btn btn-outline-primary" style="margin-right: 15px;" (click)="changeMonth(-1)">prev</button>
+        </td>
+        <td><h2>{{ monthYear }}</h2></td>
+        <td>
+          <button type="button" class="btn btn-outline-primary" style="margin-left: 15px;" (click)="changeMonth(1)">next</button>
         </td>
       </tr>
-    </tbody>
-  </table>
+    </table>
+    <hr>
+    <table style="text-align: center; vertical-align: middle;">
+      <thead>
+        <tr style="background-color: beige; height: 30px;">
+          <th class="tabrow">monday</th>
+          <th class="tabrow">tuesday</th>
+          <th class="tabrow">wednesday</th>
+          <th class="tabrow">thursday</th>
+          <th class="tabrow">friday</th>
+          <th class="tabrow">saturday</th>
+          <th class="tabrow">sunday</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="height: 10px;"></tr>
+        <tr *ngFor="let week of dates">
+          <td *ngFor="let day of week" class="tabrow">
+            <button class="btn btn-outline-primary btn-lg btn-block"
+              style="height: 100%; font-size: 30px;"
+              [style.color]="day.color"
+              [style.border-color]="day.borderColor"
+              [style.background-color]="day.backColor"
+              [disabled]="day.disabled"
+              (click)="workoutScheduler.open(day)">
+              <table>
+                <tr>
+                  <td>{{ day.dayVal }}</td>
+                </tr>
+                <tr>
+                  <td>
+                    <div *ngIf="day.schedule != null" style="font-size: 18px;">
+                      {{ day.schedule.workout.name | charactersAmount:10 }}
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <app-workout-scheduler #workoutScheduler>
