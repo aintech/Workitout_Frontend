@@ -40,6 +40,8 @@
                 <label for="file_{{ exercise.index }}_{{ media.index }}">File</label>
                 <input type="file" name="file_{{ exercise.index }}_{{ media.index }}" placeholder="Upload file" (change)="uploadMedia($event, media)">
 
+                <img [src]="media.image" *ngIf="media.image" style="max-width: 500px;">
+
                 <button type="button" class="btn btn-outline-danger" style="margin-top: 5px; color: red;"
                   (click)="removeMedia(media, exercise)">
                   X Remove Media

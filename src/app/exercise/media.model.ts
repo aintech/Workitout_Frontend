@@ -5,4 +5,5 @@ export class Media {
   url: string;
   file: File;
   source: Uint8Array;
+  image: any;
 }

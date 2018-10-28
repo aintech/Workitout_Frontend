@@ -148,11 +148,17 @@ export class WorkoutEditComponent implements OnInit {
     if (files.length > 0) {
       media.file = files[0];
       media.name = media.file.name;
-      const reader: FileReader = new FileReader();
-      reader.readAsArrayBuffer(media.file);
-      reader.onload = function () {
-        const arrayBuffer: any = reader.result;
-        media.source = new Uint8Array(arrayBuffer);
+
+      const readerArray: FileReader = new FileReader();
+      readerArray.readAsArrayBuffer(media.file);
+      readerArray.onload = (loadEvent: any) => {
+        media.source = new Uint8Array(readerArray.result);
+      };
+
+      const readerData: FileReader = new FileReader();
+      readerData.readAsDataURL(event.target.files[0]);
+      readerData.onload = (loadEvent: any) => {
+        media.image = loadEvent.target.result;
       };
     }
   }
