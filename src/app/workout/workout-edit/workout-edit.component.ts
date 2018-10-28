@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Exercise } from '../../exercise/exercise.model';
 import { Round } from '../../exercise/round.model';
 import { Subject } from 'rxjs';
+import { Media } from '../../exercise/media.model';
 
 @Component({
   selector: 'app-workout-edit',
@@ -17,8 +18,9 @@ export class WorkoutEditComponent implements OnInit {
 
   deletedExercises: Exercise[] = [];
   deletedRounds: Round[] = [];
+  deletedMedias: Media[] = [];
 
-  roundsDeleted: Subject<void> = new Subject<void>();
+  // roundsDeleted: Subject<void> = new Subject<void>();
 
   constructor(private service: WorkoutService,
               private router: Router,
@@ -36,6 +38,7 @@ export class WorkoutEditComponent implements OnInit {
               if (exercise.rounds != null) {
                 exercise.rounds.sort((x, y) => x.index - y.index);
               }
+              exercise.externalSource = exercise.externalLink != null;
             });
           }
         },
@@ -44,6 +47,7 @@ export class WorkoutEditComponent implements OnInit {
     }
     this.deletedExercises = [];
     this.deletedRounds = [];
+    this.deletedMedias = [];
   }
 
   onSubmit() {
@@ -53,6 +57,9 @@ export class WorkoutEditComponent implements OnInit {
     });
     this.deletedExercises.forEach(exercise => {
       this.service.deleteExercise(exercise).subscribe();
+    });
+    this.deletedMedias.forEach(media => {
+      this.service.deleteMedia(media).subscribe();
     });
     this.service.workoutPersisted.subscribe(res => {
       this.router.navigate(['/workout-list']);
@@ -71,6 +78,12 @@ export class WorkoutEditComponent implements OnInit {
     exercise.rounds.push(round);
   }
 
+  addMedia (exercise: Exercise) {
+    const media: Media = new Media();
+    media.index = exercise.medias.length;
+    exercise.medias.push(media);
+  }
+
   removeExercise (exercise: Exercise) {
     const idx = this.workout.exercises.indexOf(exercise, 0);
     this.workout.exercises.splice(idx, 1);
@@ -86,11 +99,17 @@ export class WorkoutEditComponent implements OnInit {
           this.deletedRounds.splice(idx, 1);
         }
       });
+      exercise.medias.forEach(media => {
+        if (this.deletedMedias.includes(media)) {
+          const idx: number = this.deletedMedias.indexOf(media, 0);
+          this.deletedMedias.splice(idx, 1);
+        }
+      });
     }
   }
 
   removeRound (round: Round, exercise: Exercise) {
-    const idx = exercise.rounds.indexOf(round, 0);
+    const idx: number = exercise.rounds.indexOf(round, 0);
     exercise.rounds.splice(idx, 1);
     let i: number = 0;
     exercise.rounds.forEach(round => {
@@ -98,6 +117,43 @@ export class WorkoutEditComponent implements OnInit {
     });
     if (round.id != null) {
       this.deletedRounds.push(round);
+    }
+  }
+
+  removeMedia (media: Media, exercise: Exercise) {
+    const idx: number = exercise.medias.indexOf(media);
+    exercise.medias.splice(idx, 1);
+    let i: number = 0;
+    exercise.medias.forEach(media => {
+      media.index = i++;
+    });
+    if (media.id != null) {
+      this.deletedMedias.push(media);
+    }
+  }
+
+  switchExternalSource (exercise: Exercise) {
+    exercise.externalSource = !exercise.externalSource;
+    if (exercise.externalSource) {
+      exercise.instruction = null;
+      exercise.rounds = [];
+      exercise.weight = null;
+    } else {
+      exercise.externalLink = null;
+    }
+  }
+
+  uploadMedia (event, media: Media) {
+    const files: FileList = event.target.files;
+    if (files.length > 0) {
+      media.file = files[0];
+      media.name = media.file.name;
+      const reader: FileReader = new FileReader();
+      reader.readAsArrayBuffer(media.file);
+      reader.onload = function () {
+        const arrayBuffer: any = reader.result;
+        media.source = new Uint8Array(arrayBuffer);
+      };
     }
   }
 

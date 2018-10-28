@@ -52,7 +52,7 @@ const appRoutes: Routes = [
   },
   {
     path: '',
-    redirectTo: '/calendar-view',
+    redirectTo: '/workout-list',
     pathMatch: 'full'
   }
 ];

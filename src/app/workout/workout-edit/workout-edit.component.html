@@ -19,28 +19,68 @@
           <label for="name_{{ exercise.index }}">Exercise name</label>
           <input type="text" class="form-control" name="name_{{ exercise.index }}" [(ngModel)]="exercise.name" placeholder="Enter exercise name" required>
 
-          <label for="weight_{{ exercise.index }}">Weight</label>
-          <input type="number" class="form-control" name="weight_{{ exercise.index }}" [(ngModel)]="exercise.weight">
-
-          <label for="instruction_{{ exercise.index }}">Instruction</label>
-          <textarea class="form-control" name="instruction_{{ exercise.index }}" [(ngModel)]="exercise.instruction" rows="8" cols="80"></textarea>
-
-          <label for="timeout_{{ exercise.index }}">Timeout</label>
-          <input type="number" class="form-control" name="timeout_{{ exercise.index }}" [(ngModel)]="exercise.timeout">
-
-          <h4>Rounds</h4>
-          <div *ngFor="let round of exercise.rounds" class="form-group">
-            <h5>Round {{ round.index + 1 }}</h5>
-            <label for="repeat_{{ exercise.index }}_{{ round.index }}">Repeats</label>
-            <input type="text" class="form-control" [(ngModel)]="round.repeat" name="repeat_{{ exercise.index }}_{{ round.index }}">
-            <label for="timeout_{{ exercise.index }}_{{ round.index }}">Timeout</label>
-            <input type="number" class="form-control" [(ngModel)]="round.timeout" name="timeout_{{ exercise.index }}_{{ round.index }}">
-            <button type="button" class="btn btn-danger" style="margin-top: 5px;" (click)="removeRound(round, exercise)">Remove</button>
+          <div style="margin-top: 15px;">
+            <label for="external_{{ exercise.index }}">External source</label>
+            <input type="checkbox" style="margin-left: 10px; vertical-align: middle;"
+              name="external_{{ exercise.index }}"
+              [(ngModel)]="exercise.externalSource"
+              (click)="switchExternalSource(exercise)">
           </div>
 
-          <button type="button" class="btn btn-success" (click)="addRound(exercise)">Add Round</button>
-          <hr>
-          <button type="button" class="btn btn-danger" style="margin-top: 5px;" (click)="removeExercise(exercise)">Remove</button>
+          <div *ngIf="!exercise.externalSource">
+            <label for="instruction_{{ exercise.index }}">Instruction</label>
+            <textarea class="form-control" name="instruction_{{ exercise.index }}" [(ngModel)]="exercise.instruction" rows="8" cols="80"></textarea>
+
+            <div style="margin-top: 10px;">
+              <label>Images</label>
+              <div *ngFor="let media of exercise.medias" class="form-group">
+                <label for="url_{{ exercise.index }}_{{ media.index }}">Url</label>
+                <input type="text" class="form-control" [(ngModel)]="media.url" name="url_{{ exercise.index }}_{{ media.index }}">
+
+                <label for="file_{{ exercise.index }}_{{ media.index }}">File</label>
+                <input type="file" name="file_{{ exercise.index }}_{{ media.index }}" placeholder="Upload file" (change)="uploadMedia($event, media)">
+
+                <button type="button" class="btn btn-outline-danger" style="margin-top: 5px; color: red;"
+                  (click)="removeMedia(media, exercise)">
+                  X Remove Media
+                </button>
+              </div>
+            </div>
+            <button type="button" class="btn btn-outline-primary" (click)="addMedia(exercise)">+ Add Media</button>
+            <div></div>
+            <label style="margin-top: 10px;" for="weight_{{ exercise.index }}">Weight</label>
+            <input type="number" class="form-control" name="weight_{{ exercise.index }}" [(ngModel)]="exercise.weight">
+
+            <label style="margin-top: 10px;" for="timeout_{{ exercise.index }}">Timeout</label>
+            <input type="number" class="form-control" name="timeout_{{ exercise.index }}" [(ngModel)]="exercise.timeout">
+
+            <div style="margin-top: 10px;">
+              <label>Rounds</label>
+              <div *ngFor="let round of exercise.rounds" class="form-group">
+                <h5>Round {{ round.index + 1 }}</h5>
+                <label for="repeat_{{ exercise.index }}_{{ round.index }}">Repeats</label>
+                <input type="text" class="form-control" [(ngModel)]="round.repeat" name="repeat_{{ exercise.index }}_{{ round.index }}">
+                <label for="timeout_{{ exercise.index }}_{{ round.index }}">Timeout</label>
+                <input type="number" class="form-control" [(ngModel)]="round.timeout" name="timeout_{{ exercise.index }}_{{ round.index }}">
+                <button type="button" class="btn btn-outline-danger" style="margin-top: 5px; color: red;"
+                  (click)="removeRound(round, exercise)">
+                  X Remove Round
+                </button>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-outline-primary" (click)="addRound(exercise)">+ Add Round</button>
+            <hr>
+            <button type="button" class="btn btn-outline-danger"
+              style="margin-top: 5px; color: red;" (click)="removeExercise(exercise)">
+              X Remove Exercise
+            </button>
+          </div>
+
+          <div *ngIf="exercise.externalSource">
+            <input type="text" class="form-control" name="externalsource_{{ exercise.index }}" [(ngModel)]="exercise.externalLink" placeholder="Link to external source">
+          </div>
+
         </div>
         <div class="form-group">
           <button type="button" class="btn btn-outline-primary btn-lg btn-block" (click)="addExercise()">+ Add Exercise</button>
