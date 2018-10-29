@@ -4,7 +4,7 @@
   </div>
   <hr>
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-lg-12">
       <form (ngSubmit)="onSubmit()" #workoutForm="ngForm">
         <div class="form-group">
           <label for="name">Workout name</label>
@@ -13,10 +13,10 @@
         </div>
         <hr>
         <div *ngFor="let exercise of workout.exercises" class="form-group exercise">
-          <div align="center">
+          <!-- <div align="center">
             <h2>Exercise {{ exercise.index + 1 }}</h2>
-          </div>
-          <label for="name_{{ exercise.index }}">Exercise name</label>
+          </div> -->
+          <!-- <label for="name_{{ exercise.index }}">Exercise name</label> -->
           <input type="text" class="form-control" name="name_{{ exercise.index }}" [(ngModel)]="exercise.name" placeholder="Enter exercise name" required>
 
           <div style="margin-top: 15px;">
@@ -33,22 +33,31 @@
 
             <div style="margin-top: 10px;">
               <label>Images</label>
-              <div *ngFor="let media of exercise.medias" class="form-group">
-                <label for="url_{{ exercise.index }}_{{ media.index }}">Url</label>
-                <input type="text" class="form-control" [(ngModel)]="media.url" name="url_{{ exercise.index }}_{{ media.index }}">
+              <div *ngFor="let media of exercise.medias">
+                <!-- <label for="url_{{ exercise.index }}_{{ media.index }}">Url</label>
+                <input type="text" class="form-control" [(ngModel)]="media.url" name="url_{{ exercise.index }}_{{ media.index }}"> -->
 
-                <label for="file_{{ exercise.index }}_{{ media.index }}">File</label>
-                <input type="file" name="file_{{ exercise.index }}_{{ media.index }}" placeholder="Upload file" (change)="uploadMedia($event, media)">
+                <div *ngIf="!media.image" style="margin-top: 10px;">
+                  <label for="file_{{ exercise.index }}_{{ media.index }}">File</label>
+                  <input type="file" name="file_{{ exercise.index }}_{{ media.index }}" placeholder="Upload file"
+                    (change)="uploadMedia($event, media)" accept="image/jpeg, image/x-png, image/tiff, image/gif">
+                  <button type="button" class="btn btn-outline-danger" style="color: red;"
+                    (click)="removeMedia(media, exercise)">
+                    X Cancel
+                  </button>
+                </div>
 
-                <img [src]="media.image" *ngIf="media.image" style="max-width: 500px;">
-
-                <button type="button" class="btn btn-outline-danger" style="margin-top: 5px; color: red;"
-                  (click)="removeMedia(media, exercise)">
-                  X Remove Media
-                </button>
+                <div *ngIf="media.image" style="margin-top: 10px;">
+                  <button type="button" class="btn btn-outline-danger btn-remove"
+                    (click)="removeMedia(media, exercise)">
+                    X Remove
+                  </button>
+                  <img [src]="media.image" *ngIf="media.image" style="max-width: 500px; max-height: 500px;">
+                </div>
               </div>
             </div>
-            <button type="button" class="btn btn-outline-primary" (click)="addMedia(exercise)">+ Add Media</button>
+            
+            <button type="button" class="btn btn-outline-primary" style="margin-top: 10px;" (click)="addMedia(exercise)">+ Add Image</button>
             <div></div>
             <label style="margin-top: 10px;" for="weight_{{ exercise.index }}">Weight</label>
             <input type="number" class="form-control" name="weight_{{ exercise.index }}" [(ngModel)]="exercise.weight">

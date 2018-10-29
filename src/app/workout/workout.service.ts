@@ -74,6 +74,9 @@ export class WorkoutService {
   }
 
   private saveMedia (media: Media, exercise: Exercise) {
+    if (media.source == null || media.source.length == 0) {
+      return;
+    }
     if (media.id == null) {
       this.http.post<Media>('/back/medias/' + exercise.id, media).subscribe();
     } else {

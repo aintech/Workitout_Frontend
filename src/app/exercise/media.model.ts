@@ -3,7 +3,6 @@ export class Media {
   index: number;
   name: string;
   url: string;
-  file: File;
   source: Uint8Array;
   image: any;
 }

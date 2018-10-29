@@ -5,3 +5,12 @@ div.exercise {
   padding: 5px;
   border-width: thin;
 }
+
+.btn-remove {
+  color: red;
+  position: absolute;
+}
+
+.btn-remove:hover {
+  color: white;
+}

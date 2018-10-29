@@ -35,10 +35,12 @@ export class WorkoutEditComponent implements OnInit {
           if (this.workout.exercises != null) {
             this.workout.exercises.sort((x, y) => x.index - y.index);
             this.workout.exercises.forEach(exercise => {
-              if (exercise.rounds != null) {
-                exercise.rounds.sort((x, y) => x.index - y.index);
-              }
+              exercise.rounds.sort((x, y) => x.index - y.index);
+              exercise.medias.sort((x, y) => x.index - y.index);
               exercise.externalSource = exercise.externalLink != null;
+              exercise.medias.forEach(media => {
+                media.image = "data:image/jpeg;base64," + media.source;
+              });
             });
           }
         },
@@ -146,17 +148,17 @@ export class WorkoutEditComponent implements OnInit {
   uploadMedia (event, media: Media) {
     const files: FileList = event.target.files;
     if (files.length > 0) {
-      media.file = files[0];
-      media.name = media.file.name;
+      const file: File = files[0];
+      media.name = file.name;
 
       const readerArray: FileReader = new FileReader();
-      readerArray.readAsArrayBuffer(media.file);
+      readerArray.readAsArrayBuffer(file);
       readerArray.onload = (loadEvent: any) => {
         media.source = new Uint8Array(readerArray.result);
       };
 
       const readerData: FileReader = new FileReader();
-      readerData.readAsDataURL(event.target.files[0]);
+      readerData.readAsDataURL(file);
       readerData.onload = (loadEvent: any) => {
         media.image = loadEvent.target.result;
       };

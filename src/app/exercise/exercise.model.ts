@@ -4,7 +4,7 @@ import { Media } from "./media.model";
 export class Exercise {
   id: number;
   index: number;
-  name: string = "Exerc";
+  name: string;
   externalLink: string;
   weight: number;
   instruction: string;
