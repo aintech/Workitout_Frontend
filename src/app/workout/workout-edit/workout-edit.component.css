@@ -8,6 +8,8 @@ div.exercise {
 
 .btn-remove {
   color: red;
+  margin-left: 5px;
+  margin-top: 5px;
   position: absolute;
 }
 

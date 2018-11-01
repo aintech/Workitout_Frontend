@@ -18,7 +18,7 @@ export class CalendarDate {
   history: boolean;
   today: boolean;
 
-  constructor(date: Date) {
+  constructor(date: Date, chosenMonth: number) {
     const currDate: Date = new Date();
     this.date = date;
     this.dayVal = date.getDate().toString();
@@ -44,8 +44,8 @@ export class CalendarDate {
         this.backColor = "antiquewhite";
         this.today = true;
       } else {
-        //Если следующий месяц. date.getMonth() на этоп этапе всегда больше, либо равен currDate.getMonth()
-        if (date.getMonth() != currDate.getMonth()) {
+        //В последующих числах date.getMonth() всегда больше, либо равен передаваемому месяцу
+        if (date.getMonth() != chosenMonth) {
           this.borderColor = "coral";
         }
       }

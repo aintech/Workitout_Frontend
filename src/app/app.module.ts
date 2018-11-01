@@ -18,12 +18,19 @@ import { CalendarViewComponent } from './calendar-view/calendar-view.component';
 import { WorkoutSchedulerComponent } from './calendar-view/workout-scheduler/workout-scheduler.component';
 import { WorkoutScheduleService } from './calendar-view/workout-scheduler/workout-schedule.service';
 import { CharactersAmountPipe } from './calendar-view/characters-amount.pipe';
+import { WorkoutPerformComponent } from './workout-perform/workout-perform.component';
+import { ArabicRomanPipe } from './workout-perform/arabic-roman.pipe';
 
 const appRoutes: Routes = [
   {
     path: 'calendar-view',
     component: CalendarViewComponent,
     data: { title: 'Calendar' }
+  },
+  {
+    path: 'workout-perform/:id',
+    component: WorkoutPerformComponent,
+    data: { title: 'Perform' }
   },
   {
     path: 'workout-list',
@@ -52,7 +59,7 @@ const appRoutes: Routes = [
   },
   {
     path: '',
-    redirectTo: '/workout-list',
+    redirectTo: '/calendar-view',
     pathMatch: 'full'
   }
 ];
@@ -69,7 +76,9 @@ const appRoutes: Routes = [
     FooterComponent,
     CalendarViewComponent,
     WorkoutSchedulerComponent,
-    CharactersAmountPipe
+    CharactersAmountPipe,
+    WorkoutPerformComponent,
+    ArabicRomanPipe
   ],
   imports: [
     BrowserModule,

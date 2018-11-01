@@ -38,22 +38,19 @@ export class CalendarViewComponent implements OnInit {
   }
 
   private fillDates () {
-    let currDate: Date = new Date();
-    const shiftDate: Date = new Date(currDate.getFullYear(), currDate.getMonth() + this.monthOffset, currDate.getDate());
-    this.monthYear = this.months[shiftDate.getMonth()] + " of " + shiftDate.getFullYear();
-    const firstDay: Date = new Date(shiftDate.getFullYear(), shiftDate.getMonth(), 1);
-    const lastDay: Date = new Date(shiftDate.getFullYear(), shiftDate.getMonth() + 1, 0)
-    let starting: number =  7 + firstDay.getDay() - 1;
-    let ending: number = 7 + lastDay.getDate() - 1;
-
-    let beginingDate: Date = new Date(firstDay.getFullYear(), firstDay.getMonth(), firstDay.getDate() - starting);
+    const currDate: Date = new Date();
+    const firstDay: Date = new Date(currDate.getFullYear(), currDate.getMonth() + this.monthOffset, 1);
+    this.monthYear = this.months[firstDay.getMonth()] + " of " + firstDay.getFullYear();
+    const starting: number = (firstDay.getDay() < 5? 7: 0) + firstDay.getDay() - 1;
+    const beginingDate: Date = new Date(firstDay.getFullYear(), firstDay.getMonth(), firstDay.getDate() - starting);
 
     this.dates = [];
     let index:number = 0;
     for (let i:number = 0; i < 6; i++) {
       this.dates[i] = [];
       for (let j: number = 0; j < 7; j++) {
-        const date: CalendarDate = new CalendarDate(new Date(beginingDate.getFullYear(), beginingDate.getMonth(), beginingDate.getDate() + index));
+        const weekDate: Date = new Date(beginingDate.getFullYear(), beginingDate.getMonth(), beginingDate.getDate() + index);
+        const date: CalendarDate = new CalendarDate(weekDate, firstDay.getMonth());
         this.dates[i].push(date);
         index++;
         const dateVal: string = this.asJSON(date.date);

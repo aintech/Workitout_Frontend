@@ -2,6 +2,6 @@ import { Exercise } from "../exercise/exercise.model";
 
 export class Workout {
   id: number;
-  name: string = "Workit";
+  name: string;
   exercises: Exercise[] = [];
 }

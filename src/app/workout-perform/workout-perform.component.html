@@ -1,0 +1,50 @@
+<div class="container" align="center">
+  <div class="row">
+    <div class="col-lg-12" *ngIf="workout">
+      <h1>{{ workout.name }}</h1>
+      <table class="exercise_table">
+        <tr>
+          <td *ngFor="let exercise of workout.exercises"
+            [style.width]="(100 / workout.exercises.length) + '%'"
+            [style.font-weight]="getFontWeightStyle(exercise)"
+            [style.border]="getBorderStyle(exercise)"
+            [style.background]="getBackgroundStyle(exercise)">
+            {{ exercise.name }}
+          </td>
+        </tr>
+      </table>
+      <hr>
+      <div *ngIf="exercise">
+        <h2>{{ exercise.name }}</h2>
+        <div>
+          <span class="image_border" *ngFor="let media of exercise.medias">
+            <img class="image" [src]="media.image">
+          </span>
+        </div>
+        <hr>
+        <div>
+          <table class="round_table">
+            <tr>
+              <td *ngFor="let carouselElement of roundsCarousel" class="round_td">
+                <table *ngIf="carouselElement.round" class="inner_table">
+                  <tr>
+                    <td class="round_td_repeat">
+                      <h5>Round {{ (carouselElement.round.index + 1) | arabicRoman }}</h5>
+                      <h2>{{ carouselElement.round.repeat }}</h2>
+                    </td>
+                    <td *ngIf="carouselElement.round.id != exercise.rounds[exercise.rounds.length - 1].id" class="round_td_timeout">
+                      <h2>{{ carouselElement.round.timeout }}</h2>
+                    </td>
+                    <td *ngIf="carouselElement.round.id == exercise.rounds[exercise.rounds.length - 1].id" class="round_td_timeout">
+                      <h2>{{ carouselElement.exercise.timeout }}</h2>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -4,6 +4,7 @@ import { Workout } from '../../workout/workout.model';
 import { WorkoutService } from '../../workout/workout.service';
 import { WorkoutSchedule } from './workout-schedule.model';
 import { WorkoutScheduleService } from './workout-schedule.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-workout-scheduler',
@@ -21,11 +22,13 @@ export class WorkoutSchedulerComponent implements OnInit {
   workouts: Workout[];
 
   constructor(private workoutService: WorkoutService,
-              private workoutScheduleService: WorkoutScheduleService) { }
+              private workoutScheduleService: WorkoutScheduleService,
+              private router: Router) { }
 
   ngOnInit() {
     this.workoutService.getWorkouts().subscribe(data => {
       this.workouts = <Workout[]>data;
+      this.workouts.sort((x, y) => x.id - y.id);
     });
   }
 
@@ -44,7 +47,7 @@ export class WorkoutSchedulerComponent implements OnInit {
   }
 
   performWorkout () {
-
+    this.router.navigate(['/workout-perform/' + this.schedulerDate.schedule.workout.id])
   }
 
   cancelWorkout () {

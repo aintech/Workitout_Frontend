@@ -33,10 +33,39 @@
 
             <div style="margin-top: 10px;">
               <label>Images</label>
-              <div *ngFor="let media of exercise.medias">
-                <!-- <label for="url_{{ exercise.index }}_{{ media.index }}">Url</label>
-                <input type="text" class="form-control" [(ngModel)]="media.url" name="url_{{ exercise.index }}_{{ media.index }}"> -->
 
+              <!-- <table>
+                <tr>
+                  <td>
+                    <div *ngIf="exercise.medias.length > 0">
+                      <div *ngIf="!exercise.medias[0].image" style="margin-top: 10px;">
+                        <label for="file_{{ exercise.index }}_{{ exercise.medias[0].index }}">File</label>
+                        <input type="file" name="file_{{ exercise.index }}_{{ exercise.medias[0].index }}" placeholder="Upload file"
+                          (change)="uploadMedia($event, exercise.medias[0])" accept="image/jpeg, image/x-png, image/tiff, image/gif">
+                        <button type="button" class="btn btn-outline-danger" style="color: red;"
+                          (click)="removeMedia(exercise.medias[0], exercise)">
+                          X Cancel
+                        </button>
+                      </div>
+                      <div *ngIf="exercise.medias[0].image" style="margin-top: 10px;">
+                        <button type="button" class="btn btn-outline-danger btn-remove"
+                          (click)="removeMedia(exercise.medias[0], exercise)">
+                          X Remove
+                        </button>
+                        <img [src]="exercise.medias[0].image" *ngIf="exercise.medias[0].image" style="max-width: 300px; max-height: 300px; border: solid thin;">
+                      </div>
+                    </div>
+                    <div *ngIf="exercise.medias.length == 0">
+                      <button type="button" class="btn btn-outline-primary" style="margin-top: 10px;" (click)="addMedia(exercise)">+ Add Image</button>
+                    </div>
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </table> -->
+
+              <div *ngFor="let media of exercise.medias">
                 <div *ngIf="!media.image" style="margin-top: 10px;">
                   <label for="file_{{ exercise.index }}_{{ media.index }}">File</label>
                   <input type="file" name="file_{{ exercise.index }}_{{ media.index }}" placeholder="Upload file"
@@ -52,11 +81,11 @@
                     (click)="removeMedia(media, exercise)">
                     X Remove
                   </button>
-                  <img [src]="media.image" *ngIf="media.image" style="max-width: 500px; max-height: 500px;">
+                  <img [src]="media.image" *ngIf="media.image" style="max-height: 500px; border: solid thin;">
                 </div>
               </div>
             </div>
-            
+
             <button type="button" class="btn btn-outline-primary" style="margin-top: 10px;" (click)="addMedia(exercise)">+ Add Image</button>
             <div></div>
             <label style="margin-top: 10px;" for="weight_{{ exercise.index }}">Weight</label>
