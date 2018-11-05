@@ -2,6 +2,7 @@
   <div class="row">
     <div class="col-lg-12" *ngIf="workout">
       <h1>{{ workout.name }}</h1>
+
       <table class="exercise_table">
         <tr>
           <td *ngFor="let exercise of workout.exercises"
@@ -13,36 +14,54 @@
           </td>
         </tr>
       </table>
+
       <hr>
+
       <div *ngIf="exercise">
         <h2>{{ exercise.name }}</h2>
-        <div>
-          <span class="image_border" *ngFor="let media of exercise.medias">
-            <img class="image" [src]="media.image">
-          </span>
-        </div>
-        <hr>
-        <div>
-          <table class="round_table">
+        <div style="width: 80%;">
+          <table style="width: 100%;">
             <tr>
-              <td *ngFor="let carouselElement of roundsCarousel" class="round_td">
-                <table *ngIf="carouselElement.round" class="inner_table">
-                  <tr>
-                    <td class="round_td_repeat">
-                      <h5>Round {{ (carouselElement.round.index + 1) | arabicRoman }}</h5>
-                      <h2>{{ carouselElement.round.repeat }}</h2>
+              <td style="width: 30%;">
+                <table style="width: 100%; text-align: center;">
+                  <tr *ngFor="let element of performElements">
+                    <td *ngIf="element.round" style="border: solid thin lightblue;"
+                      [style.height]="getElementHeight(element)"
+                      [style.background-color]="getBackgroundElementStyle(element)">
+                      Round {{ (element.round.index + 1) | arabicRoman}}: {{ element.round.repeat }} Reps
                     </td>
-                    <td *ngIf="carouselElement.round.id != exercise.rounds[exercise.rounds.length - 1].id" class="round_td_timeout">
-                      <h2>{{ carouselElement.round.timeout }}</h2>
-                    </td>
-                    <td *ngIf="carouselElement.round.id == exercise.rounds[exercise.rounds.length - 1].id" class="round_td_timeout">
-                      <h2>{{ carouselElement.exercise.timeout }}</h2>
+                    <td *ngIf="!element.round" style="border: solid thin lightblue;"
+                      [style.height]="getElementHeight(element)"
+                      [style.background-color]="getBackgroundElementStyle(element)">
+                      timeout: {{ element.timeout }} sec.
                     </td>
                   </tr>
                 </table>
               </td>
+              <td style="width: 70%;">
+                <div style="text-align: center;">
+                  <span class="image_border" *ngFor="let media of exercise.medias">
+                    <img class="image" [src]="media.image">
+                  </span>
+                </div>
+              </td>
             </tr>
           </table>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-lg-12" style="margin-top: 10px;">
+
+          <button *ngIf="!exerciseStarted"
+            type="button" class="btn btn-outline-primary"
+            style="font-size: 30px; width: 30%;"
+            (click)="beginExercise()">Begin exercise -></button>
+
+          <div *ngIf="exerciseStarted && performElement.round" >
+            <input type="number" [value]="performElement.round.repeat">
+            <button type="button" class="btn btn-outline-primary" (click)="roundDone()">Done</button>
+          </div>
         </div>
       </div>
     </div>

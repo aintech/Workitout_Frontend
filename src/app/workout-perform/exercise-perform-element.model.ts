@@ -1,8 +1,7 @@
 import { Round } from "../exercise/round.model";
 import { Exercise } from "../exercise/exercise.model";
 
-export class RoundCarouselElement {
+export class ExercisePerformElement {
   round: Round;
-  exercise: Exercise;
-  showTimer: boolean;
+  timeout: number;
 }

@@ -4,7 +4,7 @@ import { WorkoutService } from '../workout/workout.service';
 import { ActivatedRoute } from '@angular/router';
 import { Exercise } from '../exercise/exercise.model';
 import { Round } from '../exercise/round.model';
-import { RoundCarouselElement } from './round-carousel-element.model';
+import { ExercisePerformElement } from './exercise-perform-element.model';
 
 @Component({
   selector: 'app-workout-perform',
@@ -15,18 +15,18 @@ export class WorkoutPerformComponent implements OnInit {
 
   workout: Workout;
 
+  exerciseIndex: number = 0;
   exercise: Exercise;
 
   // round: Round;
 
-  exerciseIndex: number = 1;
-  roundIndex: number = 0;
+  // roundIndex: number = 0;
+  elementIndex: number = 0;
+  performElement: ExercisePerformElement;
 
-  roundsCarousel: RoundCarouselElement[] = [new RoundCarouselElement(),
-                                            new RoundCarouselElement(),
-                                            new RoundCarouselElement(),
-                                            new RoundCarouselElement(),
-                                            new RoundCarouselElement()];
+  exerciseStarted: boolean = false;
+
+  performElements: ExercisePerformElement[] = [];
 
   constructor (private workoutService: WorkoutService,
                private route: ActivatedRoute) { }
@@ -48,12 +48,19 @@ export class WorkoutPerformComponent implements OnInit {
           });
         }
         this.exercise = this.workout.exercises[this.exerciseIndex];
-        this.roundsCarousel.forEach(carousel => carousel.exercise = this.exercise);
-        this.roundsCarousel[2].round = this.exercise.rounds[0];
-        this.roundsCarousel[3].round = this.exercise.rounds[1];
-        this.roundsCarousel[4].round = this.exercise.rounds[2];
-
-        // this.round = this.exercise.rounds[this.roundIndex];
+        this.exercise.rounds.forEach(round => {
+          let element: ExercisePerformElement = new ExercisePerformElement();
+          element.round = round;
+          this.performElements.push(element);
+          element = new ExercisePerformElement();
+          if (round === this.exercise.rounds[this.exercise.rounds.length - 1]) {
+            element.timeout = this.exercise.timeout;
+          } else {
+            element.timeout = round.timeout;
+          }
+          this.performElements.push(element);
+        });
+        this.performElement = this.performElements[this.elementIndex];
       },
       (err) => { console.log(err); }
     );
@@ -82,5 +89,23 @@ export class WorkoutPerformComponent implements OnInit {
       return "aliceblue";
     }
     return "";
+  }
+
+  getElementHeight (performElement: ExercisePerformElement): string {
+    if (this.performElements.indexOf(performElement) == this.elementIndex) {
+      return "150px";
+    }
+    return "50px";
+  }
+
+  getBackgroundElementStyle (performElement: ExercisePerformElement): string {
+    if (this.performElements.indexOf(performElement) == this.elementIndex) {
+      return "antiquewhite";
+    }
+    return "";
+  }
+
+  beginExercise () {
+    this.exerciseStarted = true;
   }
 }
