@@ -8,7 +8,7 @@ export class Exercise {
   externalLink: string;
   weight: number;
   instruction: string;
-  timeout: number = 30;
+  timeout: number = 240;
   rounds: Round[] = [];
   medias: Media[] = [];
 

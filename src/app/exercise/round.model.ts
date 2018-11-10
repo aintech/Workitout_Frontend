@@ -3,4 +3,6 @@ export class Round {
   index: number;
   repeat: number = 10;
   timeout: number = 30;
+
+  repeatsDone: number = 0;
 }

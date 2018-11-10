@@ -20,6 +20,7 @@ import { WorkoutScheduleService } from './calendar-view/workout-scheduler/workou
 import { CharactersAmountPipe } from './calendar-view/characters-amount.pipe';
 import { WorkoutPerformComponent } from './workout-perform/workout-perform.component';
 import { ArabicRomanPipe } from './workout-perform/arabic-roman.pipe';
+import { NumberTimePipe } from './workout-perform/number-time.pipe';
 
 const appRoutes: Routes = [
   {
@@ -78,7 +79,8 @@ const appRoutes: Routes = [
     WorkoutSchedulerComponent,
     CharactersAmountPipe,
     WorkoutPerformComponent,
-    ArabicRomanPipe
+    ArabicRomanPipe,
+    NumberTimePipe
   ],
   imports: [
     BrowserModule,

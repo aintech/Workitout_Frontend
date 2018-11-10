@@ -28,12 +28,12 @@
                     <td *ngIf="element.round" style="border: solid thin lightblue;"
                       [style.height]="getElementHeight(element)"
                       [style.background-color]="getBackgroundElementStyle(element)">
-                      Round {{ (element.round.index + 1) | arabicRoman}}: {{ element.round.repeat }} Reps
+                      Round {{ (element.round.index + 1) | arabicRoman}}: {{ (element.round.repeatsDone == 0? '': (element.round.repeatsDone + '/')) }}{{ element.round.repeat }} Reps
                     </td>
                     <td *ngIf="!element.round" style="border: solid thin lightblue;"
                       [style.height]="getElementHeight(element)"
                       [style.background-color]="getBackgroundElementStyle(element)">
-                      timeout: {{ element.timeout }} sec.
+                      timeout: {{ element.timeout | numberTime }}
                     </td>
                   </tr>
                 </table>
@@ -56,12 +56,39 @@
           <button *ngIf="!exerciseStarted"
             type="button" class="btn btn-outline-primary"
             style="font-size: 30px; width: 30%;"
-            (click)="beginExercise()">Begin exercise -></button>
+            (click)="beginExercise()">
+            Begin exercise ->
+          </button>
 
-          <div *ngIf="exerciseStarted && performElement.round" >
-            <input type="number" [value]="performElement.round.repeat">
-            <button type="button" class="btn btn-outline-primary" (click)="roundDone()">Done</button>
+          <div *ngIf="exerciseStarted">
+            <div *ngIf="performElement.round" >
+              <table cellpadding="5" cellspacing="5">
+                <tr>
+                  <td style="font-size: 24px;">Performed reps <hr></td>
+                  <td>
+                    <div><input type="number" class="round_repeat" [(ngModel)]="performElement.round.repeatsDone"></div>
+                    <div><button type="button" class="btn btn-outline-primary max_round_repeat" (click)="performElement.round.repeatsDone = performElement.round.repeat;">max</button></div>
+                  </td>
+                  <td><button type="button" class="btn btn-outline-primary" style="font-size: 30px; height: 68px;" (click)="nextElement()">Next -></button></td>
+                </tr>
+              </table>
+            </div>
+
+            <div *ngIf="performElement.timeout != null && performElement.timeout > 0">
+              <table cellpadding="5" cellspacing="5">
+                <tr>
+                  <td style="font-size: 24px;">Timeout </td>
+                  <td style="font-size: 30px; border-right: solid thin lightblue; border-left: solid thin lightblue;">{{ performElement.timeout | numberTime}}</td>
+                  <td><button type="button" class="btn btn-outline-danger" style="font-size: 30px; height: 68px;" (click)="nextElement()">Skip -></button></td>
+                </tr>
+              </table>
+            </div>
+
+            <div *ngIf="performElement.timeout != null && performElement.timeout == 0">
+              <button type="button" class="btn btn-outline-primary" style="font-size: 30px; height: 68px;" (click)="nextElement()">Next -></button>
+            </div>
           </div>
+
         </div>
       </div>
     </div>

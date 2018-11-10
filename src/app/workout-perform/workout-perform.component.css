@@ -37,3 +37,17 @@
 .inner_table {
   width: 100%;
 }
+
+.round_repeat {
+  font-size: 30px;
+  width: 62px;
+  height: 40px;
+  padding: 5px 5px 5px 5px;
+}
+
+.max_round_repeat {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  height: 26px;
+  width: 100%;
+}

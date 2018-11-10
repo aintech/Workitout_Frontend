@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Exercise } from '../exercise/exercise.model';
 import { Round } from '../exercise/round.model';
 import { ExercisePerformElement } from './exercise-perform-element.model';
+import { Subject, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-workout-perform',
@@ -15,7 +16,7 @@ export class WorkoutPerformComponent implements OnInit {
 
   workout: Workout;
 
-  exerciseIndex: number = 0;
+  exerciseIndex: number = -1;
   exercise: Exercise;
 
   // round: Round;
@@ -27,6 +28,10 @@ export class WorkoutPerformComponent implements OnInit {
   exerciseStarted: boolean = false;
 
   performElements: ExercisePerformElement[] = [];
+
+  timerId: any;
+
+  timerAlert: HTMLAudioElement;
 
   constructor (private workoutService: WorkoutService,
                private route: ActivatedRoute) { }
@@ -47,23 +52,13 @@ export class WorkoutPerformComponent implements OnInit {
             });
           });
         }
-        this.exercise = this.workout.exercises[this.exerciseIndex];
-        this.exercise.rounds.forEach(round => {
-          let element: ExercisePerformElement = new ExercisePerformElement();
-          element.round = round;
-          this.performElements.push(element);
-          element = new ExercisePerformElement();
-          if (round === this.exercise.rounds[this.exercise.rounds.length - 1]) {
-            element.timeout = this.exercise.timeout;
-          } else {
-            element.timeout = round.timeout;
-          }
-          this.performElements.push(element);
-        });
-        this.performElement = this.performElements[this.elementIndex];
+        this.nextExercise();
       },
       (err) => { console.log(err); }
     );
+    this.timerAlert = new Audio();
+    this.timerAlert.src = "assets/audio/timer_alarm.mp3";
+    this.timerAlert.load();
   }
 
   getFontWeightStyle (exercise: Exercise): string {
@@ -107,5 +102,71 @@ export class WorkoutPerformComponent implements OnInit {
 
   beginExercise () {
     this.exerciseStarted = true;
+  }
+
+  nextElement () {
+    this.elementIndex++;
+    if (this.timerId != null) {
+      clearInterval(this.timerId);
+      this.timerId = null;
+    }
+    this.timerAlert.pause();
+    if (this.elementIndex < this.performElements.length) {
+      this.performElement = this.performElements[this.elementIndex];
+      if (this.performElement.timeout) {
+        this.timerId = setInterval (() => {
+          this.countdownTimeout();
+        }, 1000);
+      }
+    } else {
+      this.nextExercise();
+    }
+  }
+
+  private nextExercise () {
+    this.performElements = [];
+    this.exerciseIndex++;
+    if (this.exerciseIndex < this.workout.exercises.length) {
+      this.exercise = this.workout.exercises[this.exerciseIndex];
+      this.exercise.rounds.forEach(round => {
+        round.repeatsDone = 0;
+        let element: ExercisePerformElement = new ExercisePerformElement();
+        element.round = round;
+        this.performElements.push(element);
+        element = new ExercisePerformElement();
+        if (round === this.exercise.rounds[this.exercise.rounds.length - 1]) {
+          element.timeout = this.exercise.timeout;
+        } else {
+          element.timeout = round.timeout;
+        }
+        this.performElements.push(element);
+      });
+      this.elementIndex = 0;
+      this.performElement = this.performElements[this.elementIndex];
+    } else {
+      this.endWorkout();
+    }
+  }
+
+  countdownTimeout () {
+    this.performElement.timeout--;
+    if (this.performElement.timeout == 0) {
+      this.endTimeout();
+    }
+  }
+
+  endTimeout () {
+    clearInterval(this.timerId);
+    this.timerId = null;
+    this.timerAlert.play();
+  }
+
+  endWorkout () {
+    this.writeHistory();
+    console.log("END WORKOUT");
+  }
+
+  writeHistory () {
+    console.log("WRITE HISTORY");
   }
 }
