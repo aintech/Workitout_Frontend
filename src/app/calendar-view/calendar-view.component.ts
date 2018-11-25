@@ -31,6 +31,7 @@ export class CalendarViewComponent implements OnInit {
     this.scheduleService.getWorkoutSchedules().subscribe(data => {
       this.workoutSchedules = <WorkoutSchedule[]>data;
       this.workoutSchedules.forEach(schedule => {
+        schedule.workoutHistories.sort((x, y) => x.index - y.index);
         this.dateToSchedule.set(schedule.date.toString(), schedule);
       });
       this.fillDates();

@@ -21,6 +21,9 @@ import { CharactersAmountPipe } from './calendar-view/characters-amount.pipe';
 import { WorkoutPerformComponent } from './workout-perform/workout-perform.component';
 import { ArabicRomanPipe } from './workout-perform/arabic-roman.pipe';
 import { NumberTimePipe } from './workout-perform/number-time.pipe';
+import { WorkoutHistoryComponent } from './calendar-view/workout-history/workout-history.component';
+import { WorkoutHistoryService } from './calendar-view/workout-history/workout-history.service';
+import { WeightGramKgPipe } from './util/weight-gram-kg.pipe';
 
 const appRoutes: Routes = [
   {
@@ -80,7 +83,9 @@ const appRoutes: Routes = [
     CharactersAmountPipe,
     WorkoutPerformComponent,
     ArabicRomanPipe,
-    NumberTimePipe
+    NumberTimePipe,
+    WorkoutHistoryComponent,
+    WeightGramKgPipe
   ],
   imports: [
     BrowserModule,
@@ -88,7 +93,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [ExerciseService, WorkoutService, WorkoutScheduleService],
+  providers: [ExerciseService, WorkoutService, WorkoutScheduleService, WorkoutHistoryService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

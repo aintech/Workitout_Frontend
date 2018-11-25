@@ -30,10 +30,15 @@
                       [style.background-color]="getBackgroundElementStyle(element)">
                       Round {{ (element.round.index + 1) | arabicRoman}}: {{ (element.round.repeatsDone == 0? '': (element.round.repeatsDone + '/')) }}{{ element.round.repeat }} Reps
                     </td>
-                    <td *ngIf="!element.round" style="border: solid thin lightblue;"
+                    <td *ngIf="!element.round && !element.finish" style="border: solid thin lightblue;"
                       [style.height]="getElementHeight(element)"
                       [style.background-color]="getBackgroundElementStyle(element)">
                       timeout: {{ element.timeout | numberTime }}
+                    </td>
+                    <td *ngIf="element.finish" style="border: solid thin lightblue;"
+                      [style.height]="getElementHeight(element)"
+                      [style.background-color]="getBackgroundElementStyle(element)">
+                      FINISH
                     </td>
                   </tr>
                 </table>
@@ -74,6 +79,10 @@
               </table>
             </div>
 
+            <div *ngIf="performElement.timeout != null && performElement.timeout == 0">
+              <button type="button" class="btn btn-outline-primary" style="font-size: 30px; height: 68px;" (click)="nextElement()">Next -></button>
+            </div>
+
             <div *ngIf="performElement.timeout != null && performElement.timeout > 0">
               <table cellpadding="5" cellspacing="5">
                 <tr>
@@ -84,9 +93,12 @@
               </table>
             </div>
 
-            <div *ngIf="performElement.timeout != null && performElement.timeout == 0">
-              <button type="button" class="btn btn-outline-primary" style="font-size: 30px; height: 68px;" (click)="nextElement()">Next -></button>
-            </div>
+            <button *ngIf="performElement.finish"
+              type="button" class="btn btn-outline-primary"
+              style="font-size: 30px; width: 30%;"
+              (click)="finishWorkout()">
+              Finish Workout
+            </button>
           </div>
 
         </div>

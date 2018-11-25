@@ -13,8 +13,16 @@ export class WorkoutScheduleService {
     return this.http.get<WorkoutSchedule[]>('/back/workoutschedules');
   }
 
+  getWorkoutSchedule (scheduleId: number) : Observable<WorkoutSchedule> {
+    return this.http.get<WorkoutSchedule>('/back/workoutschedules/' + scheduleId);
+  }
+
   persist (workout: Workout, workoutSchedule: WorkoutSchedule): Observable<WorkoutSchedule> {
-    return this.http.post<WorkoutSchedule>('/back/workoutschedules/' + workout.id, workoutSchedule);
+    if (workoutSchedule.id == null) {
+      return this.http.post<WorkoutSchedule>('/back/workoutschedules/' + workout.id, workoutSchedule);
+    } else {
+      return this.http.put<WorkoutSchedule>('/back/workoutschedules/' + workoutSchedule.id, workoutSchedule);
+    }
   }
 
   delete (workoutSchedule: WorkoutSchedule): Observable<string> {

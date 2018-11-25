@@ -87,25 +87,60 @@
             </div>
 
             <button type="button" class="btn btn-outline-primary" style="margin-top: 10px;" (click)="addMedia(exercise)">+ Add Image</button>
-            <div></div>
-            <label style="margin-top: 10px;" for="weight_{{ exercise.index }}">Weight</label>
-            <input type="number" class="form-control" name="weight_{{ exercise.index }}" [(ngModel)]="exercise.weight">
 
-            <label style="margin-top: 10px;" for="timeout_{{ exercise.index }}">Timeout</label>
-            <input type="number" class="form-control" name="timeout_{{ exercise.index }}" [(ngModel)]="exercise.timeout">
+            <table cellspacing="5" cellpadding="5" style="margin-top: 5px;">
+              <tr>
+                <td><h6>Weight: </h6></td>
+                <td>
+                  <input style="width: 70px;" type="number" class="form-control" name="weight_{{ exercise.index }}" [(ngModel)]="exercise.weight">
+                </td>
+                <td><h6>Kg</h6></td>
+              </tr>
+              <tr>
+                <td><h6>Timeout: </h6></td>
+                <td>
+                  <input style="width: 70px;" type="number" class="form-control" name="timeout_{{ exercise.index }}" [(ngModel)]="exercise.timeout">
+                </td>
+                <td><h6> sec.</h6></td>
+              </tr>
+            </table>
+            <!-- <label style="margin-top: 10px;" for="weight_{{ exercise.index }}">Weight</label> -->
+
+
+            <!-- <label style="margin-top: 10px;" for="timeout_{{ exercise.index }}">Timeout</label> -->
+
 
             <div style="margin-top: 10px;">
               <label>Rounds</label>
               <div *ngFor="let round of exercise.rounds" class="form-group">
-                <h5>Round {{ round.index + 1 }}</h5>
-                <label for="repeat_{{ exercise.index }}_{{ round.index }}">Repeats</label>
-                <input type="text" class="form-control" [(ngModel)]="round.repeat" name="repeat_{{ exercise.index }}_{{ round.index }}">
-                <label for="timeout_{{ exercise.index }}_{{ round.index }}">Timeout</label>
-                <input type="number" class="form-control" [(ngModel)]="round.timeout" name="timeout_{{ exercise.index }}_{{ round.index }}">
-                <button type="button" class="btn btn-outline-danger" style="margin-top: 5px; color: red;"
-                  (click)="removeRound(round, exercise)">
-                  X Remove Round
-                </button>
+                <table cellpadding="5" cellspacing="5">
+                  <tr>
+                    <td style="border-right: solid thin lightblue; width: 100px;">
+                      <h5>Round {{ round.index + 1 | arabicRoman }}</h5>
+                    </td>
+                    <td><h6>repeats: </h6></td>
+                    <td style="border-right: solid thin lightblue;">
+                      <input style="width: 70px;" type="number" class="form-control" [(ngModel)]="round.repeat" name="repeat_{{ exercise.index }}_{{ round.index }}">
+                    </td>
+                    <td><h6>timeout: </h6></td>
+                    <td>
+                      <input style="width: 70px;" type="number" class="form-control" [(ngModel)]="round.timeout" name="timeout_{{ exercise.index }}_{{ round.index }}">
+                    </td>
+                    <td style="border-right: solid thin lightblue;">
+                      <h6> sec.</h6>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-outline-danger" style="color: red;"
+                        (click)="removeRound(round, exercise)">
+                        X Remove Round
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- <label for="repeat_{{ exercise.index }}_{{ round.index }}">Repeats</label> -->
+                <!-- <label for="timeout_{{ exercise.index }}_{{ round.index }}">Timeout</label> -->
+
               </div>
             </div>
 

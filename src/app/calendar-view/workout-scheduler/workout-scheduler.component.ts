@@ -47,7 +47,7 @@ export class WorkoutSchedulerComponent implements OnInit {
   }
 
   performWorkout () {
-    this.router.navigate(['/workout-perform/' + this.schedulerDate.schedule.workout.id])
+    this.router.navigate(['/workout-perform/' + this.schedulerDate.schedule.id])
   }
 
   cancelWorkout () {

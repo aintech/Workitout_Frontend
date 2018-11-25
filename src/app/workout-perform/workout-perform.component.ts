@@ -6,6 +6,11 @@ import { Exercise } from '../exercise/exercise.model';
 import { Round } from '../exercise/round.model';
 import { ExercisePerformElement } from './exercise-perform-element.model';
 import { Subject, Observable } from 'rxjs';
+import { WorkoutSchedule } from '../calendar-view/workout-scheduler/workout-schedule.model';
+import { WorkoutScheduleService } from '../calendar-view/workout-scheduler/workout-schedule.service';
+import { Router } from '@angular/router';
+import { WorkoutHistoryService } from '../calendar-view/workout-history/workout-history.service';
+import { WorkoutHistory } from '../calendar-view/workout-history/workout-history.model';
 
 @Component({
   selector: 'app-workout-perform',
@@ -15,6 +20,7 @@ import { Subject, Observable } from 'rxjs';
 export class WorkoutPerformComponent implements OnInit {
 
   workout: Workout;
+  workoutSchedule: WorkoutSchedule;
 
   exerciseIndex: number = -1;
   exercise: Exercise;
@@ -34,13 +40,18 @@ export class WorkoutPerformComponent implements OnInit {
   timerAlert: HTMLAudioElement;
 
   constructor (private workoutService: WorkoutService,
-               private route: ActivatedRoute) { }
+               private scheduleService: WorkoutScheduleService,
+               private historyService: WorkoutHistoryService,
+               private route: ActivatedRoute,
+               private router: Router) { }
 
   ngOnInit() {
     const id: number = this.route.snapshot.params['id'];
-    this.workoutService.getWorkout(id).subscribe(
+
+    this.scheduleService.getWorkoutSchedule(id).subscribe(
       data => {
-        this.workout = <Workout>data;
+        this.workoutSchedule = <WorkoutSchedule>data;
+        this.workout = this.workoutSchedule.workout;
         if (this.workout.exercises != null) {
           this.workout.exercises.sort((x, y) => x.index - y.index);
           this.workout.exercises.forEach(exercise => {
@@ -53,9 +64,9 @@ export class WorkoutPerformComponent implements OnInit {
           });
         }
         this.nextExercise();
-      },
-      (err) => { console.log(err); }
-    );
+      }
+    )
+
     this.timerAlert = new Audio();
     this.timerAlert.src = "assets/audio/timer_alarm.mp3";
     this.timerAlert.load();
@@ -130,12 +141,18 @@ export class WorkoutPerformComponent implements OnInit {
       this.exercise = this.workout.exercises[this.exerciseIndex];
       this.exercise.rounds.forEach(round => {
         round.repeatsDone = 0;
+        //Элемент с количеством повторений
         let element: ExercisePerformElement = new ExercisePerformElement();
         element.round = round;
         this.performElements.push(element);
+        //Элемент с таймаутом
         element = new ExercisePerformElement();
         if (round === this.exercise.rounds[this.exercise.rounds.length - 1]) {
-          element.timeout = this.exercise.timeout;
+          if (this.exercise === this.workout.exercises[this.workout.exercises.length - 1]) {
+            element.finish = true;
+          } else {
+            element.timeout = this.exercise.timeout;
+          }
         } else {
           element.timeout = round.timeout;
         }
@@ -143,8 +160,6 @@ export class WorkoutPerformComponent implements OnInit {
       });
       this.elementIndex = 0;
       this.performElement = this.performElements[this.elementIndex];
-    } else {
-      this.endWorkout();
     }
   }
 
@@ -161,12 +176,31 @@ export class WorkoutPerformComponent implements OnInit {
     this.timerAlert.play();
   }
 
-  endWorkout () {
+  finishWorkout () {
     this.writeHistory();
-    console.log("END WORKOUT");
+    this.workoutSchedule.performed = true;
+    this.scheduleService.persist(this.workout, this.workoutSchedule).subscribe(
+      data => {
+        this.router.navigate(['/calendar-view']);
+      }, (err) => { console.log(err); }
+    );
   }
 
   writeHistory () {
-    console.log("WRITE HISTORY");
+    this.workout.exercises.forEach(exercise => {
+      const history = new WorkoutHistory();
+      history.name = exercise.name;
+      history.index = exercise.index;
+      history.weight = exercise.weight;
+      history.workoutSchedule = this.workoutSchedule;
+      history.repeats = "";
+      exercise.rounds.forEach(round => {
+        history.repeats += "" + round.repeatsDone + "/" + round.repeat;
+        if (round != exercise.rounds[exercise.rounds.length - 1]) {
+          history.repeats += ";";
+        }
+      });
+      this.historyService.persist(this.workoutSchedule, history).subscribe();
+    });
   }
 }

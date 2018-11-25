@@ -15,7 +15,7 @@ export class CalendarDate {
   hoverColor: string = "red";
 
   disabled: boolean;
-  history: boolean;
+  before: boolean;
   today: boolean;
 
   constructor(date: Date, chosenMonth: number) {
@@ -38,7 +38,7 @@ export class CalendarDate {
     if (dateDiff < 0) {
       this.color = "gray";
       this.borderColor = "gray";
-      this.history = true;
+      this.before = true;
     } else {
       if (dateDiff == 0) {
         this.backColor = "antiquewhite";
@@ -50,12 +50,12 @@ export class CalendarDate {
         }
       }
     }
-    this.disabled = this.history;
+    this.disabled = this.before;
   }
 
   setSchedule (schedule: WorkoutSchedule) {
     this.schedule = schedule;
-    if (this.history) {
+    if (this.before) {
       this.color = "black";
       this.borderColor = "black";
     }
