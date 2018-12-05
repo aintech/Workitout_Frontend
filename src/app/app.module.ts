@@ -24,6 +24,9 @@ import { NumberTimePipe } from './workout-perform/number-time.pipe';
 import { WorkoutHistoryComponent } from './calendar-view/workout-history/workout-history.component';
 import { WorkoutHistoryService } from './calendar-view/workout-history/workout-history.service';
 import { WeightGramKgPipe } from './util/weight-gram-kg.pipe';
+import { WorkoutPlanComponent } from './workout-plan/workout-plan.component';
+import { WorkoutPlanService } from './workout-plan/workout-plan.service';
+import { AvailableWorkoutPipe } from './workout-plan/available-workout.pipe';
 
 const appRoutes: Routes = [
   {
@@ -62,8 +65,13 @@ const appRoutes: Routes = [
     data: { title: 'Exercise Edit' }
   },
   {
+    path: 'workout-plan',
+    component: WorkoutPlanComponent,
+    data: { title: 'Workout Plans' }
+  },
+  {
     path: '',
-    redirectTo: '/calendar-view',
+    redirectTo: '/workout-plan',
     pathMatch: 'full'
   }
 ];
@@ -85,7 +93,9 @@ const appRoutes: Routes = [
     ArabicRomanPipe,
     NumberTimePipe,
     WorkoutHistoryComponent,
-    WeightGramKgPipe
+    WeightGramKgPipe,
+    WorkoutPlanComponent,
+    AvailableWorkoutPipe
   ],
   imports: [
     BrowserModule,
@@ -93,7 +103,13 @@ const appRoutes: Routes = [
     HttpClientModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [ExerciseService, WorkoutService, WorkoutScheduleService, WorkoutHistoryService],
+  providers: [
+    ExerciseService,
+    WorkoutService,
+    WorkoutScheduleService,
+    WorkoutHistoryService,
+    WorkoutPlanService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
