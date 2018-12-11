@@ -42,8 +42,8 @@
             <table>
               <tr *ngFor="let history of schedulerDate.schedule.workoutHistories">
                 <td>
-                  {{ history.name }} ({{ history.weight | weightGramKg }})
-                  <p>repeats: {{ history.repeats }}</p>
+                  {{ history.name }}<span *ngIf="history.weight > 0">({{ history.weight | weightGramKg }})</span>
+                  <p *ngIf="history.repeats != null && history.repeats.length > 0">repeats: {{ history.repeats }}</p>
                 </td>
               </tr>
             </table>

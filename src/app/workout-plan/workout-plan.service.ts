@@ -28,11 +28,7 @@ export class WorkoutPlanService {
         }
       });
       plan.bindings.forEach(bind => {
-        if (bind.id == null) {
           this.http.post("/back/workoutplanbindings/" + plan.id, bind).subscribe();
-        } else {
-          this.http.put("/back/workoutplanbindings", bind).subscribe();
-        }
       });
     });
   }

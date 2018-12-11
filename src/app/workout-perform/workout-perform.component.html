@@ -3,22 +3,24 @@
     <div class="col-lg-12" *ngIf="workout">
       <h1>{{ workout.name }}</h1>
 
-      <table class="exercise_table">
-        <tr>
-          <td *ngFor="let exercise of workout.exercises"
-            [style.width]="(100 / workout.exercises.length) + '%'"
-            [style.font-weight]="getFontWeightStyle(exercise)"
-            [style.border]="getBorderStyle(exercise)"
-            [style.background]="getBackgroundStyle(exercise)">
-            {{ exercise.name }}
-          </td>
-        </tr>
-      </table>
+      <div *ngIf="workout.exercises.length > 1">
+        <table class="exercise_table">
+          <tr>
+            <td *ngFor="let exercise of workout.exercises"
+              [style.width]="(100 / workout.exercises.length) + '%'"
+              [style.font-weight]="getFontWeightStyle(exercise)"
+              [style.border]="getBorderStyle(exercise)"
+              [style.background]="getBackgroundStyle(exercise)">
+              {{ exercise.name }}
+            </td>
+          </tr>
+        </table>
 
-      <hr>
+        <hr>
+      </div>
 
       <div *ngIf="exercise">
-        <h2>{{ exercise.name }}</h2>
+        <h2 *ngIf="!(workout.exercises.length == 1 && workout.name == exercise.name)">{{ exercise.name }}</h2>
         <div style="width: 80%;">
           <table style="width: 100%;">
             <tr>
@@ -58,48 +60,72 @@
       <div class="row">
         <div class="col-lg-12" style="margin-top: 10px;">
 
-          <button *ngIf="!exerciseStarted"
-            type="button" class="btn btn-outline-primary"
-            style="font-size: 30px; width: 30%;"
-            (click)="beginExercise()">
-            Begin exercise ->
-          </button>
+          <div *ngIf="exercise.externalSource">
+            <iframe width="560" height="315" [src]="exercise.safeLink" frameborder="0" allowfullscreen></iframe>
 
-          <div *ngIf="exerciseStarted">
-            <div *ngIf="performElement.round" >
-              <table cellpadding="5" cellspacing="5">
-                <tr>
-                  <td style="font-size: 24px;">Performed reps <hr></td>
-                  <td>
-                    <div><input type="number" class="round_repeat" [(ngModel)]="performElement.round.repeatsDone"></div>
-                    <div><button type="button" class="btn btn-outline-primary max_round_repeat" (click)="performElement.round.repeatsDone = performElement.round.repeat;">max</button></div>
-                  </td>
-                  <td><button type="button" class="btn btn-outline-primary" style="font-size: 30px; height: 68px;" (click)="nextElement()">Next -></button></td>
-                </tr>
-              </table>
+            <div *ngIf="exerciseIndex != (workout.exercises.length - 1)">
+              <button
+                type="button" class="btn btn-outline-primary"
+                style="font-size: 30px; width: 30%;"
+                (click)="nextExercise()">
+                Next Exercise
+              </button>
             </div>
-
-            <div *ngIf="performElement.timeout != null && performElement.timeout == 0">
-              <button type="button" class="btn btn-outline-primary" style="font-size: 30px; height: 68px;" (click)="nextElement()">Next -></button>
+            <div *ngIf="exerciseIndex == (workout.exercises.length - 1)">
+              <button
+                type="button" class="btn btn-outline-primary"
+                style="font-size: 30px; width: 30%;"
+                (click)="finishWorkout()">
+                Finish Workout
+              </button>
             </div>
+          </div>
 
-            <div *ngIf="performElement.timeout != null && performElement.timeout > 0">
-              <table cellpadding="5" cellspacing="5">
-                <tr>
-                  <td style="font-size: 24px;">Timeout </td>
-                  <td style="font-size: 30px; border-right: solid thin lightblue; border-left: solid thin lightblue;">{{ performElement.timeout | numberTime}}</td>
-                  <td><button type="button" class="btn btn-outline-danger" style="font-size: 30px; height: 68px;" (click)="nextElement()">Skip -></button></td>
-                </tr>
-              </table>
-            </div>
-
-            <button *ngIf="performElement.finish"
+          <div *ngIf="!exercise.externalSource">
+            <button *ngIf="!exerciseStarted"
               type="button" class="btn btn-outline-primary"
               style="font-size: 30px; width: 30%;"
-              (click)="finishWorkout()">
-              Finish Workout
+              (click)="beginExercise()">
+              Begin exercise ->
             </button>
+
+            <div *ngIf="exerciseStarted">
+              <div *ngIf="performElement.round" >
+                <table cellpadding="5" cellspacing="5">
+                  <tr>
+                    <td style="font-size: 24px;">Performed reps <hr></td>
+                    <td>
+                      <div><input type="number" class="round_repeat" [(ngModel)]="performElement.round.repeatsDone"></div>
+                      <div><button type="button" class="btn btn-outline-primary max_round_repeat" (click)="performElement.round.repeatsDone = performElement.round.repeat;">max</button></div>
+                    </td>
+                    <td><button type="button" class="btn btn-outline-primary" style="font-size: 30px; height: 68px;" (click)="nextElement()">Next -></button></td>
+                  </tr>
+                </table>
+              </div>
+
+              <div *ngIf="performElement.timeout != null && performElement.timeout == 0">
+                <button type="button" class="btn btn-outline-primary" style="font-size: 30px; height: 68px;" (click)="nextElement()">Next -></button>
+              </div>
+
+              <div *ngIf="performElement.timeout != null && performElement.timeout > 0">
+                <table cellpadding="5" cellspacing="5">
+                  <tr>
+                    <td style="font-size: 24px;">Timeout </td>
+                    <td style="font-size: 30px; border-right: solid thin lightblue; border-left: solid thin lightblue;">{{ performElement.timeout | numberTime}}</td>
+                    <td><button type="button" class="btn btn-outline-danger" style="font-size: 30px; height: 68px;" (click)="nextElement()">Skip -></button></td>
+                  </tr>
+                </table>
+              </div>
+
+              <button *ngIf="performElement.finish"
+                type="button" class="btn btn-outline-primary"
+                style="font-size: 30px; width: 30%;"
+                (click)="finishWorkout()">
+                Finish Workout
+              </button>
+            </div>
           </div>
+
 
         </div>
       </div>

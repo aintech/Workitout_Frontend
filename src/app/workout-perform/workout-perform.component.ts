@@ -11,6 +11,7 @@ import { WorkoutScheduleService } from '../calendar-view/workout-scheduler/worko
 import { Router } from '@angular/router';
 import { WorkoutHistoryService } from '../calendar-view/workout-history/workout-history.service';
 import { WorkoutHistory } from '../calendar-view/workout-history/workout-history.model';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-workout-perform',
@@ -43,7 +44,8 @@ export class WorkoutPerformComponent implements OnInit {
                private scheduleService: WorkoutScheduleService,
                private historyService: WorkoutHistoryService,
                private route: ActivatedRoute,
-               private router: Router) { }
+               private router: Router,
+               private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
     const id: number = this.route.snapshot.params['id'];
@@ -139,6 +141,9 @@ export class WorkoutPerformComponent implements OnInit {
     this.exerciseIndex++;
     if (this.exerciseIndex < this.workout.exercises.length) {
       this.exercise = this.workout.exercises[this.exerciseIndex];
+      if (this.exercise.externalLink != null) {
+        this.exercise.safeLink = this.sanitizer.bypassSecurityTrustResourceUrl(this.exercise.externalLink.replace("watch?v=", "embed/"));
+      }
       this.exercise.rounds.forEach(round => {
         round.repeatsDone = 0;
         //Элемент с количеством повторений

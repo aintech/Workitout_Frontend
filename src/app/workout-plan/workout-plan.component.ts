@@ -18,6 +18,8 @@ export class WorkoutPlanComponent implements OnInit {
 
   workouts: Workout[] = [];
 
+  availableWorkouts: Workout[] = [];
+
   deletedBindings: WorkoutPlanBinding[] = [];
 
   constructor(private planService: WorkoutPlanService,
@@ -27,6 +29,9 @@ export class WorkoutPlanComponent implements OnInit {
     this.planService.getPlans().subscribe(
       data => {
         this.workoutPlans = <WorkoutPlan[]>data;
+        this.workoutPlans.forEach(plan => {
+          plan.bindings.sort((x, y) => x.index - y.index);
+        });
       }, (err) => { console.log(err); }
     )
     this.workoutService.getWorkouts().subscribe(
@@ -41,16 +46,30 @@ export class WorkoutPlanComponent implements OnInit {
     plan.index = this.workoutPlans.length;
     this.workoutPlans.push(plan);
     this.editedPlan = plan;
+    this.availableWorkouts = this.workouts.slice();
   }
 
   editPlan (plan: WorkoutPlan) {
     this.editedPlan = plan;
+    this.checkAvailableWorkouts();
+  }
+
+  cancelPlan (plan: WorkoutPlan) {
+    this.editedPlan = null;
+    if (plan.id == null) {
+      const idx: number = this.workoutPlans.indexOf(plan);
+      this.workoutPlans.splice(idx, 1);
+    } else {
+      console.log("WHEN CANCELING SAVED PLAN");
+    }
+    this.checkAvailableWorkouts();
   }
 
   savePlan () {
     this.planService.persist(this.editedPlan, this.deletedBindings);
     this.editedPlan = null;
     this.deletedBindings = [];
+    this.checkAvailableWorkouts();
   }
 
   removePlan (plan: WorkoutPlan) {
@@ -67,22 +86,40 @@ export class WorkoutPlanComponent implements OnInit {
     bind.index = this.editedPlan.bindings.length;
     bind.workout = workout;
     this.editedPlan.bindings.push(bind);
+    this.checkAvailableWorkouts();
   }
 
   removeWorkout (binding: WorkoutPlanBinding) {
-    const idx: number = this.editedPlan.bindings.indexOf(binding);
     const index = binding.index;
+    const idx: number = this.editedPlan.bindings.indexOf(binding);
     this.editedPlan.bindings.splice(idx, 1);
     this.editedPlan.bindings.forEach(bind => {
       if (bind.index > index) {
         bind.index--;
       }
     });
+    if (binding.id != null) {
+      this.deletedBindings.push(binding);
+    }
+    this.checkAvailableWorkouts();
   }
 
-  availableWorkouts (): Workout[] {
-    let existed: Workout[] = [];
-    this.editedPlan.bindings.forEach(binding => existed.push(binding.workout));
-    return this.workouts.filter(workout => !existed.includes(workout));
+  private checkAvailableWorkouts () {
+    this.availableWorkouts = [];
+    if (this.editedPlan != null) {
+      let existed: Workout[] = [];
+      this.editedPlan.bindings.forEach(binding => existed.push(binding.workout));
+      this.workouts.forEach(workout => {
+        let exist: boolean = false;
+        existed.forEach(wrk => {
+          if (workout.id == wrk.id) {
+            exist = true;
+          }
+        });
+        if (!exist) {
+          this.availableWorkouts.push(workout);
+        }
+      });
+    }
   }
 }

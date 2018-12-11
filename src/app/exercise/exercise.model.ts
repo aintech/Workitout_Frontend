@@ -1,5 +1,6 @@
 import { Round } from "./round.model";
 import { Media } from "./media.model";
+import { SafeResourceUrl } from "@angular/platform-browser";
 
 export class Exercise {
   id: number;
@@ -13,4 +14,5 @@ export class Exercise {
   medias: Media[] = [];
 
   externalSource: boolean;
+  safeLink: SafeResourceUrl;
 }
