@@ -81,6 +81,16 @@ export class WorkoutPlanComponent implements OnInit {
     }
   }
 
+  schedulePlan (plan: WorkoutPlan) {
+    plan.scheduled = true;
+    this.planService.persist(plan, []);
+  }
+
+  unschedulePlan (plan: WorkoutPlan) {
+    plan.scheduled = false;
+    this.planService.persist(plan, []);
+  }
+
   addWorkout (workout: Workout) {
     const bind: WorkoutPlanBinding = new WorkoutPlanBinding();
     bind.index = this.editedPlan.bindings.length;

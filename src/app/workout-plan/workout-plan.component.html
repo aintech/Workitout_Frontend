@@ -29,6 +29,22 @@
           <div *ngFor="let bind of plan.bindings" style="margin-top: 10px;">
             {{ bind.index + 1 }} - {{ bind.workout.name }}
           </div>
+          <div style="margin-top: 10px;">
+            <button
+              *ngIf="!plan.scheduled"
+              type="button"
+              class="btn btn-outline-primary"
+              (click)="schedulePlan(plan)">
+              Schedule plan
+            </button>
+            <button
+              *ngIf="plan.scheduled"
+              type="button"
+              class="btn btn-outline-danger"
+              (click)="unschedulePlan(plan)">
+              Unschedule plan
+            </button>
+          </div>
         </div>
 
         <div *ngIf="plan == editedPlan">
@@ -40,16 +56,22 @@
             placeholder="Enter plan name"
             required>
 
-            <div *ngFor="let bind of plan.bindings" style="margin-top: 10px;">
-              {{ bind.index + 1 }} - {{ bind.workout.name }}
-              <button
-                type="button"
-                class="btn btn-outline-danger"
-                style="color: red;"
-                (click)="removeWorkout(bind)">
-                X Remove
-              </button>
-            </div>
+            <table>
+              <tr *ngFor="let bind of plan.bindings" style="margin-top: 10px;">
+                <td style="min-width: 200px;">
+                  {{ bind.index + 1 }} - {{ bind.workout.name }}
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-outline-danger"
+                    style="color: red;"
+                    (click)="removeWorkout(bind)">
+                    X Remove
+                  </button>
+                </td>
+              </tr>
+            </table>
 
             <div>
               <span *ngFor="let work of availableWorkouts" style="margin-top: 10px; margin-right: 10px;">

@@ -4,5 +4,6 @@ export class WorkoutPlan {
   id: number;
   name: string;
   index: number;
+  scheduled: boolean;
   bindings: WorkoutPlanBinding[] = [];
 }
