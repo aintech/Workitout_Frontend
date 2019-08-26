@@ -1,47 +1,145 @@
 <div class="container">
-  <h1>Edit Exercise</h1>
+  <div align="center">
+    <h1>Exercise Editor</h1>
+  </div>
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-lg-12">
       <form (ngSubmit)="onSubmit()" #exerciseForm="ngForm">
         <div class="form-group">
+
           <label for="name">Name</label>
-          <input
-            type="text"
-            class="form-control"
-            [(ngModel)]="exercise.name"
-            name="name"
-            required>
-          <label for="instruction">Instruction</label>
-          <input
-            type="text"
-            class="form-control"
-            [(ngModel)]="exercise.instruction"
-            name="instruction">
+          <input name="name"
+                 [(ngModel)]="exercise.name"
+                 type="text"
+                 class="form-control"
+                 placeholder="Enter exercise name"
+                 required>
+
+          <div style="margin-top: 15px;"></div>
+
+          <label for="external_source">External source</label>
+          <input name="external_source"
+                 [(ngModel)]="exercise.externalSource"
+                 type="checkbox"
+                 (click)="switchExternalSource()"
+                 style="margin-left: 10px; vertical-align: middle;">
+
+          <div *ngIf="!exercise.externalSource">
+
+            <label for="instruction">Instructions</label>
+            <textarea name="instruction"
+                      [(ngModel)]="exercise.instruction"
+                      class="form-control"
+                      rows="8"
+                      cols="80"></textarea>
+
+            <div style="margin-top: 10px;"></div>
+
+            <label>Images</label>
+
+            <div style="margin-top: 5px;"></div>
+
+            <div *ngFor="let media of exercise.medias">
+              <div *ngIf="!media.image" style="margin-top: 10px;">
+                <label for="file_{{ media.index }}">File</label>
+                <input name="file_{{ media.index }}"
+                       type="file"
+                       (change)="uploadMedia($event, media)"
+                       accept="image/jpeg, image/x-png, image/tiff, image/gif"
+                       placeholder="Upload file">
+                <button type="button"
+                        class="btn btn-outline-danger"
+                        (click)="removeMedia(media)"
+                        style="color: red;">
+                  X Cancel
+                </button>
+              </div>
+
+              <div *ngIf="media.image" style="margin-top: 10px;">
+                <button type="button"
+                        class="btn btn-outline-danger btn-remove"
+                        (click)="removeMedia(media)">
+                  X Remove
+                </button>
+
+                <img [src]="media.image" *ngIf="media.image" style="max-height: 500px; border: solid thin;">
+              </div>
+            </div>
+
+            <button type="button"
+                    class="btn btn-outline-primary"
+                    style="margin-top: 10px;"
+                    (click)="addMedia()">
+              + Add Image
+            </button>
+
+            <table cellspacing="5" cellpadding="5" style="margin-top: 5px;">
+              <tr>
+                <td><h6>Weight: </h6></td>
+                <td>
+                  <input  name="weight" type="number" style="width: 70px;" class="form-control" [(ngModel)]="exercise.weight">
+                </td>
+                <td><h6>Kg</h6></td>
+              </tr>
+              <tr>
+                <td><h6>Rest time: </h6></td>
+                <td>
+                  <input name="timeout" type="number" style="width: 70px;" class="form-control" [(ngModel)]="exercise.timeout">
+                </td>
+                <td><h6> sec.</h6></td>
+              </tr>
+            </table>
+
+            <div style="margin-top: 10px;"></div>
+
+            <label>Rounds</label>
+
+            <div style="margin-top: 5px;"></div>
+
+            <div *ngFor="let round of exercise.rounds" class="form-group">
+              <table cellpadding="5" cellspacing="5">
+                <tr>
+                  <td style="border-right: solid thin lightblue; width: 100px;">
+                    <h5>Round {{ round.index + 1 | arabicRoman }}</h5>
+                  </td>
+                  <td><h6>repeats: </h6></td>
+                  <td style="border-right: solid thin lightblue;">
+                    <input style="width: 70px;" type="number" class="form-control" [(ngModel)]="round.repeat" name="repeat_{{ round.index }}">
+                  </td>
+                  <td><h6>rest time: </h6></td>
+                  <td>
+                    <input style="width: 70px;" type="number" class="form-control" [(ngModel)]="round.timeout" name="timeout_{{ round.index }}">
+                  </td>
+                  <td style="border-right: solid thin lightblue;">
+                    <h6> sec.</h6>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-outline-danger" style="color: red;"
+                            (click)="removeRound(round)">
+                      X Remove Round
+                    </button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+
+            <button type="button" class="btn btn-outline-primary" (click)="addRound()">+ Add Round</button>
+
+          </div>
+
+          <div *ngIf="exercise.externalSource">
+            <input name="externalsource"
+                   type="text"
+                   class="form-control"
+                   [(ngModel)]="exercise.externalLink"
+                   placeholder="Link to external source">
+          </div>
         </div>
-        <h2>Rounds</h2>
-        <div *ngFor="let round of exercise.rounds" class="form-group">
-          <h3>Round {{ round.index + 1}}</h3>
-          <label for="repeat_{{ round.index }}">Repeats</label>
-          <input
-            type="text"
-            class="form-control"
-            [(ngModel)]="round.repeat"
-            name="repeat_{{ round.index }}">
-            <label for="timeout_{{ round.index }}">Timeout</label>
-            <input
-              type="text"
-              class="form-control"
-              [(ngModel)]="round.timeout"
-              name="timeout_{{ round.index }}">
-        </div>
-        <button
-          type="button"
-          class="btn btn-success"
-          (click)="addRound()">
-          Add Round
-        </button>
+
         <div style="height: 5px;"></div>
+
         <hr>
+
         <div class="form-group">
           <button
             type="submit"
@@ -56,6 +154,7 @@
             (click)="onCancel()">
             Cancel
           </button>
+          <label *ngIf="recentlySaved" style="color: green; margin-left: 10px;">Successfully saved!</label>
         </div>
       </form>
     </div>

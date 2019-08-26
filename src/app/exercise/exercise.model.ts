@@ -1,6 +1,6 @@
-import { Round } from "./round.model";
-import { Media } from "./media.model";
-import { SafeResourceUrl } from "@angular/platform-browser";
+import { Round } from './round.model';
+import { Media } from './media.model';
+import { SafeResourceUrl } from '@angular/platform-browser';
 
 export class Exercise {
   id: number;

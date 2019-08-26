@@ -1,12 +1,16 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Exercise } from "./exercise.model";
-import { Observable } from "rxjs";
+import {Observable, Subject} from 'rxjs';
 import { Round } from "./round.model";
+import {Workout} from '../workout/workout.model';
+import {Media} from './media.model';
 
 
 @Injectable()
 export class ExerciseService {
+
+  exercisePersisted: Subject<Exercise> = new Subject<Exercise>();
 
   constructor (private http: HttpClient) {}
 
@@ -22,42 +26,99 @@ export class ExerciseService {
     // return exercise;
   }
 
+  persist (exercise: Exercise) {
+    this.saveExercise(exercise).subscribe(
+      data => {
+        const saved: Exercise = <Exercise>data;
+        exercise.rounds.forEach(round => {
+          this.saveRound(round, saved);
+        });
+        exercise.medias.forEach(media => {
+          this.saveMedia(media, saved);
+        });
+        this.exercisePersisted.next(saved);
+      }
+    );
+  }
+
   saveExercise (exercise: Exercise): Observable<Exercise> {
-    return this.http.post<Exercise>('/back/exercises', exercise);
-    // .subscribe (
-    //   res => {
-    //     return res['id'];
-    //     // this.router.navigate(['/exercise-list']);
-    //     // this.router.navigate(['/exercise-detail', id]);
-    //   }, (err) => {
-    //     console.log(err);
-    //   }
-    // );
-  }
-
-  updateExercise (exercise: Exercise): Observable<Exercise> {
-    let result: Observable<Exercise> = this.http.put<Exercise>('/back/exercises/' + exercise.id, exercise);
-
-    exercise.rounds.forEach(round => {
-      this.saveRound(round, exercise);
-    });
-
-    return result;
-  }
-
-  saveRound (round: Round, exercise: Exercise) {
-    if (round.id == null) {
-      this.http.post<Round>('/back/rounds', round).subscribe(
-        res => {}, (err) => {
-          console.log(err);
-        }
-      );
+    if (exercise.id == null) {
+      return this.http.post<Exercise>('/back/exercises', exercise);
     } else {
-      this.http.put<Round>('/back/rounds', round).subscribe(
-        res => {}, (err) => {
-          console.log(err);
-        }
-      )
+      return this.http.put<Exercise>('/back/exercises/' + exercise.id, exercise);
     }
+    // return this.http.post<Exercise>('/back/exercises', exercise);
+    // // .subscribe (
+    // //   res => {
+    // //     return res['id'];
+    // //     // this.router.navigate(['/exercise-list']);
+    // //     // this.router.navigate(['/exercise-detail', id]);
+    // //   }, (err) => {
+    // //     console.log(err);
+    // //   }
+    // // );
+  }
+
+  private saveRound (round: Round, exercise: Exercise) {
+    if (round.id == null) {
+      this.http.post<Round>('/back/rounds/' + exercise.id, round).subscribe(res => {}, (err) => { console.log(err); });
+    } else {
+      this.http.put<Round>('/back/rounds/' + round.id, round).subscribe(res => {}, (err) => { console.log(err); });
+    }
+  }
+
+  private saveMedia (media: Media, exercise: Exercise) {
+    if (media.source == null || media.source.length == 0) {
+      return;
+    }
+    if (media.id == null) {
+      this.http.post<Media>('/back/medias/' + exercise.id, media).subscribe();
+    } else {
+      this.http.put<Media>('/back/medias/' + media.id, media).subscribe();
+    }
+  }
+
+  // public deleteExercises (exercises: Exercise[]) {
+  //   let counter: number = exercises.length;
+  //   if (counter == 0) {
+  //     this.exercisesDeleted.next();
+  //   } else {
+  //     exercises.forEach(exercise => {
+  //       this.deleteExercise(exercise).subscribe(res => {
+  //         counter--;
+  //         if (counter == 0) {
+  //           this.exercisesDeleted.next();
+  //         }
+  //       });
+  //     });
+  //   }
+  // }
+
+  public deleteExercise (exercise: Exercise): Observable<Object> {
+    return this.http.delete('/back/exercises/' + exercise.id);
+  }
+
+  // public deleteRounds (rounds: Round[]) {
+  //   let counter: number = rounds.length;
+  //   if (counter == 0) {
+  //     this.roundsDeleted.next();
+  //   } else {
+  //     rounds.forEach(rnd => {
+  //       this.deleteRound(rnd).subscribe(res => {
+  //         counter--;
+  //         if (counter == 0) {
+  //           this.roundsDeleted.next();
+  //         }
+  //       });
+  //     });
+  //   }
+  // }
+
+  public deleteRound (round: Round): Observable<Object> {
+    return this.http.delete('/back/rounds/' + round.id);
+  }
+
+  public deleteMedia (media: Media): Observable<Object> {
+    return this.http.delete('/back/medias/' + media.id);
   }
 }

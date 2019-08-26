@@ -71,7 +71,7 @@ const appRoutes: Routes = [
   },
   {
     path: '',
-    redirectTo: '/workout-plan',
+    redirectTo: '/exercise-list',
     pathMatch: 'full'
   }
 ];
