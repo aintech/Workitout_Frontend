@@ -3,29 +3,27 @@
   <table class="table">
     <thead>
       <tr>
-        <th>ID</th>
         <th>Name</th>
-        <th>Instruction</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor = "let exercise of exercises">
-        <td>{{ exercise.id }}</td>
         <td>{{ exercise.name }}</td>
-        <td>{{ exercise.instruction }}</td>
         <td>
-          <a
-            [routerLink]="['/exercise-edit', exercise.id]"
-            class="btn btn-primary">
-            edit
+          <a [routerLink]="['/exercise-edit', exercise.id]"
+            class="btn btn-outline-primary">
+            Edit
+          </a>
+          <a class="btn btn-outline-danger"
+             (click)="deleteExercise(exercise)">
+            X Delete
           </a>
         </td>
       </tr>
     </tbody>
   </table>
-  <a
-    [routerLink]="['/exercise-create']"
+  <a [routerLink]="['/exercise-create']"
     class="btn btn-primary">
-    Add new exercise
+    + Create exercise
   </a>
 </div>

@@ -26,6 +26,14 @@ export class ExerciseService {
     // return exercise;
   }
 
+  getAllExerciseTypes(): Observable<string[]> {
+    return this.http.get<string[]>('/back/exercises/types');
+  }
+
+  getAllMuscleGroups(): Observable<string[]> {
+    return this.http.get<string[]>('/back/exercises/musclegroups');
+  }
+
   persist (exercise: Exercise) {
     this.saveExercise(exercise).subscribe(
       data => {

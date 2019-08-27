@@ -6,6 +6,8 @@ export class Exercise {
   id: number;
   index: number;
   name: string;
+  type: string;
+  muscleGroup: string[] = [];
   externalLink: string;
   weight: number;
   instruction: string;

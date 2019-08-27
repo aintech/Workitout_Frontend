@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Exercise } from '../exercise.model';
-import { Round } from '../round.model';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ExerciseService } from '../exercise.service';
-import {Media} from '../media.model';
+import { Exercise } from '../exercise.model';
+import { Round } from '../round.model';
+import { Media } from '../media.model';
 
 @Component({
   selector: 'app-exercise-edit',
@@ -18,7 +18,11 @@ export class ExerciseEditComponent implements OnInit {
   deletedRounds: Round[] = [];
   deletedMedias: Media[] = [];
 
-  recentlySaved: Boolean = false;
+  recentlySaved = false;
+
+  types: string[] = [];
+
+  muscleGroups: string[] = [];
 
   constructor(private service: ExerciseService,
               private router: Router,
@@ -30,6 +34,20 @@ export class ExerciseEditComponent implements OnInit {
     ).subscribe(
       data => {
         this.exercise = <Exercise>data;
+      }, (err) => {
+        console.log(err);
+      }
+    );
+    this.service.getAllExerciseTypes().subscribe(
+      data => {
+        this.types = <string[]>data;
+      }, (err) => {
+        console.log(err);
+      }
+    );
+    this.service.getAllMuscleGroups().subscribe(
+      data => {
+        this.muscleGroups = <string[]>data;
       }, (err) => {
         console.log(err);
       }

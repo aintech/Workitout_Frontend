@@ -15,6 +15,26 @@
                  placeholder="Enter exercise name"
                  required>
 
+          <div style="margin-top: 10px;"></div>
+
+          <ul class="list-group">
+            <a class="list-group-item"
+               style="cursor: pointer"
+               *ngFor="let type of types; let i = index;">
+              {{ type }}
+            </a>
+          </ul>
+
+          <div style="margin-top: 10px;"></div>
+
+          <ul class="list-group">
+            <a class="list-group-item"
+               style="cursor: pointer"
+               *ngFor="let muscleGroup of muscleGroups; let i = index;">
+              {{ muscleGroup }}
+            </a>
+          </ul>
+
           <div style="margin-top: 15px;"></div>
 
           <label for="external_source">External source</label>
